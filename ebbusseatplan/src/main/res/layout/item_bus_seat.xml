@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View" />
+        <variable name="seatModel"
+            type="ph.easybus.ebbusseatplan.models.BusSeat" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:clipToPadding="false">
+
+        <RelativeLayout
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="2dp"
+            android:visibility="@{seatModel.space ? View.INVISIBLE : View.VISIBLE}"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <!-- HACK FOR SHADOW -->
+            <View
+                android:layout_width="35dp"
+                android:layout_height="28dp"
+                android:layout_marginTop="10dp" android:layout_marginBottom="5dp"
+                android:layout_marginStart="3dp" android:layout_marginEnd="3dp"
+                android:background="@drawable/bg_seat"
+                android:elevation="4dp"
+                shadowSeatType="@{seatModel.seatType}"
+                shadowSelected="@{seatModel.selected}" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image_seat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_seat_available"
+                android:translationZ="10dp"
+                seatType="@{seatModel.seatType}"
+                status="@{seatModel.reservation != null ? seatModel.reservation.status : -1}"
+                selected="@{seatModel.selected}"
+                specialType="@{seatModel.specialType}"
+                isCustomersView="@{seatModel.seatPlanViewModel.isCustomersView}" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text='@{String.format("%d", seatModel.seatNumber)}'
+                android:textSize="14sp"
+                android:translationZ="10dp"
+                android:visibility="@{seatModel.specialType != 1 ? View.VISIBLE : View.GONE}"
+                reservation="@{seatModel.reservation}"
+                selected="@{seatModel.selected}"
+                seatType="@{seatModel.seatType}"
+                specialType="@{seatModel.specialType}"
+                isCustomersView="@{seatModel.seatPlanViewModel.isCustomersView}" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:src="@drawable/ic_pwd"
+                android:translationZ="10dp"
+                android:visibility="@{seatModel.specialType == 1 ? View.VISIBLE : View.GONE}"
+                reservation="@{seatModel.reservation}"
+                selected="@{seatModel.selected}"
+                isCustomersView="@{seatModel.seatPlanViewModel.isCustomersView}" />
+
+            <!--
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="/"
+                android:textSize="14sp"
+                isCustomersView="@{seatModel.seatPlanViewModel.isCustomersView}"
+                reservation="@{seatModel.reservation}"
+                specialType="@{seatModel.specialType}"
+                specialTypeMode="@{2}" /> -->
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@drawable/badge_default"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            badgeSpecialType="@{seatModel.specialType}"
+            isCustomersView="@{seatModel.seatPlanViewModel.isCustomersView}">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="8dp"
+                android:textColor="@color/gray70"
+                android:text='@{String.format("%d", seatModel.seatNumber)}'
+                isCustomersView="@{seatModel.seatPlanViewModel.isCustomersView}"
+                specialType="@{seatModel.specialType}"
+                specialTypeMode="@{1}" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="8dp"
+                android:textColor="@color/gray70"
+                android:text="/"
+                isCustomersView="@{seatModel.seatPlanViewModel.isCustomersView}"
+                specialType="@{seatModel.specialType}"
+                specialTypeMode="@{2}" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            toView="@{seatModel.reserved}"
+            isCustomersView="@{seatModel.seatPlanViewModel.isCustomersView}">
+
+            <RelativeLayout
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/badge_pending"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                badgeReservation="@{seatModel.reservation.status}"
+                badgeReservationOwnOffice="@{seatModel.seatPlanViewModel.office}"
+                badgeReservationOffice="@{seatModel.reservation.shortAlias}">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_pencil"
+                    badgeReservationValue="@{seatModel.reservation.status}"
+                    badgeReservationValueMode="@{0}"
+                    badgeReservationValueOwnOffice="@{seatModel.seatPlanViewModel.office}"
+                    badgeReservationValueOffice="@{seatModel.reservation.shortAlias}" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="8dp"
+                    android:textColor="@color/white"
+                    android:text="@{seatModel.reservation.shortAlias}"
+                    badgeReservationValue="@{seatModel.reservation.status}"
+                    badgeReservationValueMode="@{1}"
+                    badgeReservationValueOwnOffice="@{seatModel.seatPlanViewModel.office}"
+                    badgeReservationValueOffice="@{seatModel.reservation.shortAlias}" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
