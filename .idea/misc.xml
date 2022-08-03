@@ -4,6 +4,20 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/badge_default.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/badge_pending.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/badge_pending_other.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/badge_reserved.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/badge_reserved_filemaker.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/badge_reserved_online.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/badge_reserved_other.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/bg_seat.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/ic_driver_seat.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/ic_pencil.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/ic_pwd.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/ic_seat_available.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/ic_seat_blocked.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/ic_seat_reserved.xml" value="0.1" />
+        <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/drawable/ic_seat_selected.xml" value="0.1" />
         <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/layout/item_bus_seat.xml" value="0.1" />
         <entry key="..\:/Users/Easybus/AndroidStudioProjects/EBBusSeatPlan/ebbusseatplan/src/main/res/layout/view_bus_seat_plan.xml" value="0.14130434782608695" />
       </map>

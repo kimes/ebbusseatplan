@@ -19,7 +19,7 @@ public class ImageViewBindingUtil {
                                       boolean isCustomersView,Reservation reservation) {
         Context context = imageView.getContext();
 
-        imageView.setColorFilter(ContextCompat.getColor(context, R.color.gray70));
+        imageView.setColorFilter(ContextCompat.getColor(context, R.color.gray10));
         if (reservation != null) {
             imageView.setColorFilter(ContextCompat.getColor(context, R.color.white));
         }

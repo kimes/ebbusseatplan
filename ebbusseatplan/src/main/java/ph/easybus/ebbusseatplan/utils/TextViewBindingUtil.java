@@ -16,7 +16,7 @@ public class TextViewBindingUtil {
                                       boolean selected, boolean isCustomersView,
                                       Reservation reservation) {
         Context context = textView.getContext();
-        textView.setTextColor(context.getResources().getColor(R.color.gray70));
+        textView.setTextColor(context.getResources().getColor(R.color.gray10));
 
         if (reservation != null) {
             textView.setTextColor(context.getResources().getColor(R.color.white));

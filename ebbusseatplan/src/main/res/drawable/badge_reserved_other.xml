@@ -5,7 +5,7 @@
             <padding
                 android:top="@dimen/badgePadding" android:bottom="@dimen/badgePadding"
                 android:left="@dimen/badgePadding" android:right="@dimen/badgePadding" />
-            <solid android:color="@color/gray70" />
+            <solid android:color="@color/gray10" />
         </shape>
     </item>
 </selector>
