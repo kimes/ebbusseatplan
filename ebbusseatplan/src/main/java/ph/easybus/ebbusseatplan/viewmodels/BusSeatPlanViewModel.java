@@ -304,7 +304,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
             }
 
             for (int i = 0; i < currTrip.getChoiceSeats().size(); i++) {
-                for (int j = 0; j < busSeats.size(); i++) {
+                for (int j = 0; j < busSeats.size(); j++) {
                     if (currTrip.getChoiceSeats().get(i) == busSeats.get(j).getSeatNumber()) {
                         busSeats.get(j).setSeatType(BusSeat.SEAT_TYPE_PREMIUM);
                         break;
