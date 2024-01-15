@@ -16,7 +16,7 @@ public class ImageViewBindingUtil {
 
     @BindingAdapter({ "selected", "isCustomersView", "reservation" })
     public static void setReservation(ImageView imageView, boolean selected,
-                                      boolean isCustomersView,Reservation reservation) {
+                                      boolean isCustomersView, Reservation reservation) {
         Context context = imageView.getContext();
 
         imageView.setColorFilter(ContextCompat.getColor(context, R.color.gray10));
@@ -50,7 +50,7 @@ public class ImageViewBindingUtil {
                     } else imageView.setImageResource(R.drawable.ic_seat_available);
                     break;
                 case BusSeat.SEAT_TYPE_PREMIUM:
-                    imageView.setImageResource(R.drawable.ic_seat_available);
+                    imageView.setImageResource(R.drawable.ic_seat_premium);
                     break;
                 case BusSeat.SEAT_TYPE_BLOCKED:
                     imageView.setImageResource(R.drawable.ic_seat_reserved);
