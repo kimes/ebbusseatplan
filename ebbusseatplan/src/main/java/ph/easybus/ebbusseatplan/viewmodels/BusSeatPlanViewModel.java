@@ -1,5 +1,7 @@
 package ph.easybus.ebbusseatplan.viewmodels;
 
+import android.os.Build;
+
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.ObservableArrayList;
@@ -9,15 +11,33 @@ import java.util.ArrayList;
 
 import ph.easybus.ebbusseatplan.BR;
 import ph.easybus.ebbusseatplan.models.BusSeat;
+import ph.easybus.ebbusseatplan.models.GridSeat;
 import ph.easybus.ebmodels.models.Bus;
 import ph.easybus.ebmodels.models.Reservation;
 import ph.easybus.ebmodels.models.Trip;
 
 public class BusSeatPlanViewModel extends BaseObservable {
 
+    private static final GridSeat NB_NW = new GridSeat(-1, -1, "A"),
+            NB_N = new GridSeat(0, -1, "A"),
+            NB_NE = new GridSeat(1, -1, "A"),
+            NB_W = new GridSeat(-1, 1, "A"),
+            NB_E = new GridSeat(1, 0, "A"),
+            NB_SW = new GridSeat(-1, 1, "A"),
+            NB_S = new GridSeat(0, 1, "A"),
+            NB_SE = new GridSeat(1, 1, "A");
+
+    private static final int E_INDEX = 0, SE_INDEX = 1, S_INDEX = 2;
+
+    private static final GridSeat[] SQUARE_DIR = { NB_E, NB_SE, NB_S };
+
     @Bindable
     private int columns;
     public int getColumns() { return columns; }
+
+    @Bindable
+    private int rows;
+    public int getRows() { return rows; }
 
     private boolean isCustomersView = false;
     @Bindable
@@ -58,6 +78,10 @@ public class BusSeatPlanViewModel extends BaseObservable {
     private ArrayList<BusSeat> busSeats;
     @Bindable
     public ArrayList<BusSeat> getBusSeats() { return busSeats; }
+
+    private ArrayList<GridSeat> seats;
+    @Bindable
+    public ArrayList<GridSeat> getSeats() { return seats; }
 
     private ObservableArrayList<Integer> selectedSeats = new ObservableArrayList<>();
     @Bindable
@@ -222,9 +246,137 @@ public class BusSeatPlanViewModel extends BaseObservable {
             if (currTrip == null) return;
             Bus bus = currTrip.getBus();
             String layout = bus.getLayout().isEmpty() ? "d" : bus.getLayout();
-            columns = bus.getSeatMap().get(0).length();
-            notifyPropertyChanged(BR.columns);
 
+            int r = bus.getSeatMap().size(),
+                c = bus.getSeatMap().get(0).length();
+
+            columns = c;
+            rows = r;
+
+            notifyPropertyChanged(BR.columns);
+            notifyPropertyChanged(BR.rows);
+
+
+            String[][] seatMapMatrix = new String[r][c];
+            for (int i = 0; i < bus.getSeatMap().size(); i++) {
+                String[] seatMapCols = bus.getSeatMap().get(i).split("");
+                System.arraycopy(seatMapCols, 0, seatMapMatrix[i], 0, seatMapCols.length);
+            }
+
+            int currSeat = 0;
+
+            ArrayList<GridSeat> seats = new ArrayList<>(), colsSeat;
+            ArrayList<Integer> usedCell = new ArrayList<>();
+
+            int seatCounter = 1;
+            for (int i = 0; i < seatMapMatrix.length; i++) {
+                colsSeat = new ArrayList<>();
+
+                for (int j = 0; j < c; j++) {
+                    int id = ((i * c) + j);
+
+                    if (!usedCell.contains(id)) {
+                        String type = seatMapMatrix[i][j];
+                        GridSeat seat = new GridSeat(j, i, type);
+                        seat.setSelectable("A".equals(type) || "U".equals(type) ||
+                                "L".equals(type) || "C".equals(type));
+
+                        if ("A".equals(type) || "C".equals(type) ||
+                                "X".equals(type) || "D".equals(type) || "/".equals(type)) {
+                            seat.setNum(seatCounter);
+                            seat.setNumberable(true);
+                            seatCounter++;
+                        }
+
+                        if ("U".equals(type) || "L".equals(type)) {
+                            ArrayList<GridSeat> n = getOrientationNeighbours(j, i, type, seatMapMatrix);
+                            n.add(new GridSeat(j, i, 0));
+
+                            int minX = j, maxX = 0, minY = i, maxY = 0;
+
+                            for (int k = 0; k < n.size(); k++) {
+                                if (n.get(k).getX() < minX) { minX = n.get(k).getX(); }
+                                if (n.get(k).getX() > maxX) { maxX = n.get(k).getX(); }
+                                if (n.get(k).getY() < minY) { minY = n.get(k).getY(); }
+                                if (n.get(k).getY() > maxY) { maxY = n.get(k).getY(); }
+
+                                usedCell.add((n.get(k).getY() * c) + n.get(k).getX());
+                            }
+
+                            if (n.size() > 1) {
+                                seat.setSide(n.get(0).getSide());
+                            }
+
+                            seat.setNum(seatCounter);
+                            seat.setNumberable(true);
+                            seat.setX(minX);
+                            seat.setY(minY);
+                            seat.setW(maxX - minX + 1);
+                            seat.setH(maxY - minY + 1);
+
+                            seatCounter++;
+                        }
+
+                        if ("R".equals(type)) {
+                            ArrayList<GridSeat> n = getRectangleNeighbours(j, i, type,
+                                    seatMapMatrix, true, usedCell);
+
+                            int minX = j, maxX = 0, minY = i, maxY = 0;
+
+                            for (int k = 0; k < n.size(); k++) {
+                                if (n.get(k).getX() < minX) minX = n.get(k).getX();
+                                if (n.get(k).getY() < minY) minY = n.get(k).getY();
+                                if (n.get(k).getX() > maxX) maxX = n.get(k).getX();
+                                if (n.get(k).getY() > maxY) maxY = n.get(k).getY();
+
+                                usedCell.add((n.get(k).getY() * c) + n.get(k).getX());
+                            }
+
+                            seat.setX(minX);
+                            seat.setY(minY);
+                            seat.setW(maxX - minX + 1);
+                            seat.setH(maxY - minY + 1);
+                            seat.setNum(-1);
+                            seat.setShowSeat(false);
+                        }
+
+                        if (!"_".equals(type)) {
+                            colsSeat.add(seat);
+                            seats.add(seat);
+                        }
+                    }
+                }
+
+                if ("d".equals(layout)) {
+
+                } else if ("r".equals(layout)) {
+                    ArrayList<GridSeat> seatsNumberable = new ArrayList<>();
+                    for (int j = 0; j < colsSeat.size(); j++) {
+                        if (colsSeat.get(j).isNumberable()) {
+                            seatsNumberable.add(colsSeat.get(j));
+                        }
+                    }
+
+                    for (int j = 0; j < seatsNumberable.size(); j++) {
+                        seatsNumberable.get(j).setNum((currSeat + seatsNumberable.size()) - j);
+                    }
+                    currSeat += seatsNumberable.size();
+                }
+            }
+
+            BusSeatPlanViewModel.this.seats = seats;
+
+            for (int i = 0; i < currTrip.getChoiceSeats().size(); i++) {
+                for (int j = 0; j < seats.size(); j++) {
+                    if (currTrip.getChoiceSeats().get(i) == seats.get(j).getNum()) {
+                        //seats.get(j).setSeatType(BusSeat.SEAT_TYPE_PREMIUM);
+                        seats.get(j).setType("C");
+                        break;
+                    }
+                }
+            }
+
+            /*
             int seatCounter = 1;
             ArrayList<BusSeat> busSeats = new ArrayList<>();
             if (layout.equals("d")) {
@@ -245,19 +397,6 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                 }
                             }
                         }
-
-                        /*
-                        if (reservations != null) {
-                            for (int k = 0; k < reservations.size(); k++) {
-                                for (int l = 0; l < reservations.get(k).getReservedSeats().size(); l++) {
-                                    if (reservations.get(k).getReservedSeats().get(l) == actualSeatNumber) {
-                                        seat.setSeatType(BusSeat.SEAT_TYPE_OCCUPIED);
-                                        seat.setReserved(true);
-                                        seat.setReservation(reservations.get(k));
-                                    }
-                                }
-                            }
-                        } */
                         busSeats.add(seat);
                     }
                 }
@@ -284,19 +423,6 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                 }
                             }
                         }
-
-                        /*
-                        if (reservations != null) {
-                            for (int k = 0; k < reservations.size(); k++) {
-                                for (int l = 0; l < reservations.get(k).getReservedSeats().size(); l++) {
-                                    if (reservations.get(k).getReservedSeats().get(l) == actualSeatNumber) {
-                                        seat.setSeatType(BusSeat.SEAT_TYPE_OCCUPIED);
-                                        seat.setReserved(true);
-                                        seat.setReservation(reservations.get(k));
-                                    }
-                                }
-                            }
-                        } */
                         busSeats.add(seat);
                     }
                     seatCounter += colMaxSeats;
@@ -312,13 +438,184 @@ public class BusSeatPlanViewModel extends BaseObservable {
                 }
             }
 
-            BusSeatPlanViewModel.this.busSeats = busSeats;
-            notifyPropertyChanged(BR.busSeats);
+            BusSeatPlanViewModel.this.busSeats = busSeats;  */
+
+            notifyPropertyChanged(BR.seats);
             calculateReservedSeats();
 
             seatPlanFinished = true;
             if (onSeatPlanEventListener != null) onSeatPlanEventListener.onSeatPlanFinish();
         }).start();
+    }
+
+    private ArrayList<GridSeat> getOrientationNeighbours(int x, int y,
+                                                         String type, String[][] matrix) {
+        ArrayList<GridSeat> neighbours = new ArrayList<>();
+
+        for (int i = 0; i < SQUARE_DIR.length; i++) {
+            GridSeat side = SQUARE_DIR[i];
+
+            if ((x + side.getX()) >= 0 && (y + side.getY()) >= 0 &&
+                    (x + side.getX()) < matrix[y].length && (y + side.getY()) < matrix.length) {
+
+                if (type.equals(matrix[y + side.getY()][x + side.getX()])) {
+                    neighbours.add(new GridSeat(x + side.getX(), y + side.getY(), i));
+                }
+            }
+        }
+
+        if (neighbours.size() > 0) {
+            if (neighbours.size() == 1) {
+                if (neighbours.get(0).getSide() == SE_INDEX) {
+                    return new ArrayList<>();
+                }
+            }
+
+            if (neighbours.size() == 2) {
+                ArrayList<GridSeat> finalNeighbours = new ArrayList<>();
+                finalNeighbours.add(neighbours.get(0));
+                return neighbours;
+            }
+
+            if (neighbours.size() == 3) {
+                ArrayList<GridSeat> finalNeighbours = new ArrayList<>();
+                finalNeighbours.add(neighbours.get(2));
+                return neighbours;
+            }
+        }
+
+        return neighbours;
+    }
+
+    private ArrayList<GridSeat> getRectangleNeighbours(int x, int y, String type,
+                                                       String[][] matrix, boolean primary,
+                                                       ArrayList<Integer> usedCell) {
+        ArrayList<GridSeat> neighbours = new ArrayList<>();
+
+        for (int i = 0; i < SQUARE_DIR.length; i++) {
+            GridSeat side = SQUARE_DIR[i];
+
+            if ((x + side.getX()) >= 0 && (y + side.getY()) >= 0 &&
+                    (x + side.getX()) < matrix[y].length && (y + side.getY()) < matrix.length) {
+
+                if (type.equals(matrix[y + side.getY()][x + side.getX()])) {
+                    int cellId = ((y + side.getY()) * matrix[y].length) + (x + side.getX());
+
+                    if (!usedCell.contains(cellId)) {
+                        neighbours.add(new GridSeat(x + side.getX(), y + side.getY(), i));
+                    }
+                }
+            }
+        }
+
+        if (neighbours.size() > 0) {
+            for (int i = 0; i < neighbours.size(); i++) {
+                ArrayList<GridSeat> n = getRectangleNeighbours(neighbours.get(i).getX(),
+                        neighbours.get(i).getY(), type, matrix, false, usedCell);
+                neighbours.addAll(n);
+            }
+        }
+
+        if (primary) {
+            neighbours.add(new GridSeat(x, y, 0));
+
+            int minX = 1000, minY = 1000, maxX = 0, maxY = 0;
+            for (int i = 0; i < neighbours.size(); i++) {
+                GridSeat s = neighbours.get(i);
+                if (s.getX() < minX) minX = s.getX();
+                if (s.getY() < minY) minY = s.getY();
+                if (s.getX() > maxX) maxX = s.getX();
+                if (s.getY() > maxY) maxY = s.getY();
+            }
+
+            ArrayList<Integer> rowHood = new ArrayList<>();
+            ArrayList<GridSeat> row;
+
+            ArrayList<Integer> neighboursToRow = new ArrayList<>();
+            for (int i = minY; i <= maxY; i++) {
+                row = new ArrayList<>();
+
+                for (int j = 0; j < neighbours.size(); j++) {
+                    int cellId = (neighbours.get(j).getY() * matrix[y].length) +
+                            (x + neighbours.get(j).getX());
+
+                    if (neighbours.get(j).getY() == i) {
+                        if (!rowHood.contains(cellId)) {
+                            rowHood.add(cellId);
+                            row.add(neighbours.get(j));
+                        }
+                    }
+                }
+
+                if (row.size() > 0) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        row.sort((a, b) -> (a.getX() < b.getX()) ? -1 : 1);
+
+                        if (row.get(0).getX() == x) {
+                            for (int j = 0; j < row.size(); j++) {
+                                neighboursToRow.add(row.get(j).getX());
+                            }
+                        }
+                    }
+                }
+            }
+
+            int colMax = 0;
+            for (int i = 0; i < neighboursToRow.size(); i++) {
+                if (neighboursToRow.get(i) > colMax) colMax = neighboursToRow.get(i);
+            }
+
+            rowHood = new ArrayList<>();
+            neighboursToRow = new ArrayList<>();
+            for (int i = minX; i <= maxX; i++) {
+                row = new ArrayList<>();
+
+                for (int j = 0; j < neighbours.size(); j++) {
+                    int cellId = (neighbours.get(j).getY() * matrix[y].length) + (x + neighbours.get(j).getX());
+
+                    if (neighbours.get(j).getX() == i) {
+                        if (!rowHood.contains(cellId)) {
+                            rowHood.add(cellId);
+                            row.add(neighbours.get(j));
+                        }
+                    }
+                }
+
+                if (row.size() > 0) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        row.sort((a, b) -> (a.getX() < b.getX()) ? -1 : 1);
+
+                        if (row.get(0).getY() == y) {
+                            for (int j = 0; j < row.size(); j++) {
+                                neighboursToRow.add(row.get(j).getY());
+                            }
+                        }
+                    }
+                }
+            }
+
+            int rowMax = 0;
+            for (int i = 0; i < neighboursToRow.size(); i++) {
+                if (neighboursToRow.get(i) > rowMax) rowMax = neighboursToRow.get(i);
+            }
+
+            ArrayList<GridSeat> finalNeighbours = new ArrayList<>();
+            rowHood = new ArrayList<>();
+            for (int i = 0; i < neighbours.size(); i++) {
+                if (neighbours.get(i).getX() >= x && neighbours.get(i).getX() <= colMax &&
+                        neighbours.get(i).getY() >= y && neighbours.get(i).getY() <= rowMax) {
+                    int cellId = (neighbours.get(i).getY() * matrix[y].length) + (x + neighbours.get(i).getX());
+                    if (!rowHood.contains(cellId)) {
+                        rowHood.add(cellId);
+                        finalNeighbours.add(neighbours.get(i));
+                    }
+                }
+            }
+
+            return finalNeighbours;
+        }
+
+        return neighbours;
     }
 
     private BusSeat createBusSeat(int _SeatNumber, char _SeatType) {

@@ -1,7 +1,10 @@
 package ph.easybus.ebbusseatplan.utils;
 
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.BindingAdapter;
 
@@ -9,6 +12,32 @@ import ph.easybus.ebbusseatplan.R;
 import ph.easybus.ebbusseatplan.models.BusSeat;
 
 public class ViewBindingUtil {
+
+    @BindingAdapter({ "shadowSeatType", "shadowReserved" })
+    public static void setShadowSeatType(View view, String type, boolean reserved) {
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams)view.getLayoutParams();
+
+        int visibility = View.VISIBLE;
+        int topMargin = 0;
+        if ("A".equals(type)) {
+            topMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12,
+                    view.getResources().getDisplayMetrics());
+
+            if (reserved) visibility = View.GONE;
+        } else if ("U".equals(type) || "L".equals(type)) {
+            topMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
+                    view.getResources().getDisplayMetrics());
+
+            if (reserved) visibility = View.GONE;
+        } else {
+            topMargin = 0;
+            visibility = View.GONE;
+            view.setVisibility(View.GONE);
+        }
+
+        params.topMargin = topMargin;
+        view.setVisibility(visibility);
+    }
 
     @BindingAdapter({ "shadowSeatType", "shadowSelected" })
     public static void setShadowSeat(View view, int seatType, boolean selected) {

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="viewModel" type="ph.easybus.app.viewmodels.MainActivityViewModel" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kimuel" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_seats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seats="@{viewModel.seats}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kimuel END" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

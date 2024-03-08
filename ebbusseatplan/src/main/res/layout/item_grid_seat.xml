@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View" />
+        <variable name="seat" type="ph.easybus.ebbusseatplan.models.GridSeat" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="3dp"
+        android:gravity="center"
+        android:clipToPadding="false">
+
+        <!-- HACK FOR SHADOW -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="2dp" android:layout_marginBottom="2dp"
+            android:layout_marginStart="2dp" android:layout_marginEnd="2dp"
+            android:background="@drawable/bg_seat"
+            android:elevation="3dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            shadowSeatType="@{seat.type}"
+            shadowReserved="@{seat.reserved}" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_bed_lower_available"
+            android:scaleType="fitXY"
+            android:translationZ="15dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            seatType="@{seat.type}"
+            reserved="@{seat.reserved}"
+            selected="@{seat.selected}"
+            isCustomersView="@{false}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text='@{String.format("%s", seat.num)}'
+            android:translationZ="15dp"
+            android:visibility="@{seat.showSeat ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            seatTextSelected="@{seat.selected}"
+            seatTextReserved="@{seat.reserved}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

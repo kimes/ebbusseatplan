@@ -2,10 +2,13 @@ package ph.easybus.ebbusseatplan.utils;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.BindingAdapter;
 
 import ph.easybus.ebbusseatplan.R;
@@ -31,6 +34,42 @@ public class ImageViewBindingUtil {
         if (isCustomersView) {
             imageView.setColorFilter(ContextCompat.getColor(context, R.color.white));
         }
+    }
+
+    @BindingAdapter(value = { "seatType", "reserved", "selected", "isCustomersView" }, requireAll = false)
+    public static void setBedSeat(AppCompatImageView view,
+                                  String seatType, boolean reserved, boolean selected,
+                                  boolean isCustomersView) {
+        Resources res = view.getResources();
+        Resources.Theme theme = view.getContext().getTheme();
+
+        int seatId = R.drawable.ic_seat_available;
+        if ("A".equals(seatType)) {
+            seatId = R.drawable.ic_seat_available;
+            if (selected) seatId = R.drawable.ic_seat_selected;
+            if (reserved) seatId = R.drawable.ic_seat_reserved;
+
+        } else if ("/".equals(seatType)) {
+            if (isCustomersView) seatId = R.drawable.ic_seat_reserved;
+            else seatId = R.drawable.ic_seat_available;
+        } else if ("X".equals(seatType)) {
+            seatId = R.drawable.ic_seat_reserved;
+        } else if ("U".equals(seatType)) {
+            seatId = R.drawable.ic_bed_upper_available;
+            if (selected) seatId = R.drawable.ic_bed_upper_selected;
+            if (reserved) seatId = R.drawable.ic_bed_upper_blocked;
+
+        } else if ("L".equals(seatType)) {
+            seatId = R.drawable.ic_bed_lower_available;
+            if (selected) seatId = R.drawable.ic_bed_lower_selected;
+            if (reserved) seatId = R.drawable.ic_bed_lower_blocked;
+
+        } else if ("R".equals(seatType)) {
+            seatId = R.drawable.ic_cr;
+        }
+
+        //view.setBackground(ResourcesCompat.getDrawable(res, seatId, theme));
+        view.setImageDrawable(ResourcesCompat.getDrawable(res, seatId, theme));
     }
 
     @TargetApi(21)
