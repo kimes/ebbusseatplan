@@ -319,7 +319,6 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                     seatMapMatrix, true, usedCell);
 
                             int minX = j, maxX = 0, minY = i, maxY = 0;
-
                             for (int k = 0; k < n.size(); k++) {
                                 if (n.get(k).getX() < minX) minX = n.get(k).getX();
                                 if (n.get(k).getY() < minY) minY = n.get(k).getY();
@@ -495,11 +494,9 @@ public class BusSeatPlanViewModel extends BaseObservable {
             GridSeat side = SQUARE_DIR[i];
 
             if ((x + side.getX()) >= 0 && (y + side.getY()) >= 0 &&
-                    (x + side.getX()) < matrix[y].length && (y + side.getY()) < matrix.length) {
-
+                (x + side.getX()) < matrix[y].length && (y + side.getY()) < matrix.length) {
                 if (type.equals(matrix[y + side.getY()][x + side.getX()])) {
                     int cellId = ((y + side.getY()) * matrix[y].length) + (x + side.getX());
-
                     if (!usedCell.contains(cellId)) {
                         neighbours.add(new GridSeat(x + side.getX(), y + side.getY(), i));
                     }
@@ -548,12 +545,15 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                 if (row.size() > 0) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        /*
                         row.sort((a, b) -> (a.getX() < b.getX()) ? -1 : 1);
 
                         if (row.get(0).getX() == x) {
-                            for (int j = 0; j < row.size(); j++) {
-                                neighboursToRow.add(row.get(j).getX());
-                            }
+                            // ADD NEIGHBOURS TO ROW
+                        } */
+
+                        for (int j = 0; j < row.size(); j++) {
+                            neighboursToRow.add(row.get(j).getX());
                         }
                     }
                 }
@@ -582,12 +582,15 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                 if (row.size() > 0) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        /*
                         row.sort((a, b) -> (a.getX() < b.getX()) ? -1 : 1);
 
                         if (row.get(0).getY() == y) {
-                            for (int j = 0; j < row.size(); j++) {
-                                neighboursToRow.add(row.get(j).getY());
-                            }
+                            // ADD NEIGHBOURS TO ROW
+                        } */
+
+                        for (int j = 0; j < row.size(); j++) {
+                            neighboursToRow.add(row.get(j).getY());
                         }
                     }
                 }
@@ -602,7 +605,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
             rowHood = new ArrayList<>();
             for (int i = 0; i < neighbours.size(); i++) {
                 if (neighbours.get(i).getX() >= x && neighbours.get(i).getX() <= colMax &&
-                        neighbours.get(i).getY() >= y && neighbours.get(i).getY() <= rowMax) {
+                    neighbours.get(i).getY() >= y && neighbours.get(i).getY() <= rowMax) {
                     int cellId = (neighbours.get(i).getY() * matrix[y].length) + (x + neighbours.get(i).getX());
                     if (!rowHood.contains(cellId)) {
                         rowHood.add(cellId);
