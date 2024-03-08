@@ -58,6 +58,7 @@
                 android:visibility='@{seat.showSeat ? ("D".equals(seat.type) ? View.GONE : View.VISIBLE) : View.GONE}'
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                seatTextType="@{seat.type}"
                 seatTextSelected="@{seat.selected}"
                 seatTextReserved="@{seat.reserved}" />
 

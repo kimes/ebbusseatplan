@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.databinding.BindingAdapter;
 
 import ph.easybus.ebbusseatplan.R;
@@ -12,12 +13,16 @@ import ph.easybus.ebmodels.models.Reservation;
 
 public class TextViewBindingUtil {
 
-    @BindingAdapter({ "seatTextSelected", "seatTextReserved" })
-    public static void setSeatTextColor(TextView view, boolean selected, boolean reserved) {
+    @BindingAdapter({ "seatTextType", "seatTextSelected", "seatTextReserved" })
+    public static void setSeatTextColor(TextView view, String seatTextType, boolean selected, boolean reserved) {
         Resources res = view.getResources();
         Resources.Theme theme = view.getContext().getTheme();
 
         int color = R.color.gray10;
+
+        if ("X".equals(seatTextType) ||
+            "u".equals(seatTextType) || "l".equals(seatTextType)) color = R.color.white;
+
         if (selected || reserved) color = R.color.white;
 
         view.setTextColor(res.getColor(color));

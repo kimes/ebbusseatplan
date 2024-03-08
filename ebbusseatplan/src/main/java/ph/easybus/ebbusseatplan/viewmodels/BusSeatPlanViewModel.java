@@ -279,13 +279,13 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                 "L".equals(type) || "C".equals(type));
 
                         if ("A".equals(type) || "C".equals(type) ||
-                                "X".equals(type) || "D".equals(type) || "/".equals(type)) {
+                            "X".equals(type) || "D".equals(type) || "/".equals(type)) {
                             seat.setNum(seatCounter);
                             seat.setNumberable(true);
                             seatCounter++;
                         }
 
-                        if ("U".equals(type) || "L".equals(type)) {
+                        if ("U".equals(type) || "L".equals(type) || "u".equals(type) || "l".equals(type)) {
                             ArrayList<GridSeat> n = getOrientationNeighbours(j, i, type, seatMapMatrix);
                             n.add(new GridSeat(j, i, 0));
 

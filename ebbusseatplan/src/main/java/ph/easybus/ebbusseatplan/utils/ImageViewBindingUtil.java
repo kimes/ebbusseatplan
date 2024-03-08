@@ -23,6 +23,7 @@ public class ImageViewBindingUtil {
         Context context = imageView.getContext();
 
         imageView.setColorFilter(ContextCompat.getColor(context, R.color.gray10));
+
         if (selected) {
             imageView.setColorFilter(ContextCompat.getColor(context, R.color.white));
         }
@@ -60,12 +61,14 @@ public class ImageViewBindingUtil {
             seatId = R.drawable.ic_bed_upper_available;
             if (selected) seatId = R.drawable.ic_bed_upper_selected;
             if (reserved) seatId = R.drawable.ic_bed_upper_blocked;
-
         } else if ("L".equals(seatType)) {
             seatId = R.drawable.ic_bed_lower_available;
             if (selected) seatId = R.drawable.ic_bed_lower_selected;
             if (reserved) seatId = R.drawable.ic_bed_lower_blocked;
-
+        } else if ("u".equals(seatType)) {
+            seatId = R.drawable.ic_bed_upper_blocked;
+        } else if ("l".equals(seatType)) {
+            seatId = R.drawable.ic_bed_lower_blocked;
         } else if ("R".equals(seatType)) {
             seatId = R.drawable.ic_cr;
         }
