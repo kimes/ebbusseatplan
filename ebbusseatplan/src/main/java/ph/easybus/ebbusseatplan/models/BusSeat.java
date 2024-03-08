@@ -2,8 +2,8 @@ package ph.easybus.ebbusseatplan.models;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.databinding.library.baseAdapters.BR;
 
-import ph.easybus.ebbusseatplan.BR;
 import ph.easybus.ebbusseatplan.viewmodels.BusSeatPlanViewModel;
 import ph.easybus.ebmodels.models.Reservation;
 

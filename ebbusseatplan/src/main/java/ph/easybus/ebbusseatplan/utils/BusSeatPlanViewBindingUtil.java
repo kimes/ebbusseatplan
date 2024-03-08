@@ -64,6 +64,7 @@ public class BusSeatPlanViewBindingUtil {
 
     @BindingAdapter("selectedSeats")
     public static void setSelectedSeats(BusSeatPlanView seatPlanView, ObservableArrayList<Integer> selectedSeats) {
+        System.out.println("SEATS SETTER");
         if (selectedSeats != null) {
             seatPlanView.getViewModel().setSelectedSeats(selectedSeats);
         }

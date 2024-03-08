@@ -4,6 +4,9 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
+import ph.easybus.ebbusseatplan.viewmodels.BusSeatPlanViewModel;
+import ph.easybus.ebmodels.models.Reservation;
+
 public class GridSeat extends BaseObservable {
 
     private boolean selectable = true, numberable = false, showSeat = true;
@@ -15,6 +18,12 @@ public class GridSeat extends BaseObservable {
     private int num = -1;
 
     private String type = "A";
+
+    @Bindable
+    private Reservation reservation;
+
+    @Bindable
+    private BusSeatPlanViewModel seatPlan;
 
     public GridSeat() {}
 
@@ -42,6 +51,8 @@ public class GridSeat extends BaseObservable {
     public int getSide() { return side; }
     public int getNum() { return num; }
     public String getType() { return type; }
+    public Reservation getReservation() { return reservation; }
+    public BusSeatPlanViewModel getSeatPlan() { return seatPlan; }
 
     public void setSelectable(boolean selectable) { this.selectable = selectable; }
     public void setNumberable(boolean numberable) { this.numberable = numberable; }
@@ -61,4 +72,12 @@ public class GridSeat extends BaseObservable {
     public void setSide(int side) { this.side = side; }
     public void setNum(int num) { this.num = num; }
     public void setType(String type) { this.type = type; }
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+        notifyPropertyChanged(BR.reservation);
+    }
+    public void setSeatPlan(BusSeatPlanViewModel seatPlan) {
+        this.seatPlan = seatPlan;
+        notifyPropertyChanged(BR.seatPlan);
+    }
 }

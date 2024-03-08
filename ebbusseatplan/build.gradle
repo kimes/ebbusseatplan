@@ -41,22 +41,17 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
 
-/*
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                from components.release
-
                 group = 'ph.easybus'
                 version = '1.0'
             }
             debug(MavenPublication) {
-                from components.debug
-
                 groupId = 'ph.easybus'
                 version = '1.0'
             }
         }
     }
-} */
+}

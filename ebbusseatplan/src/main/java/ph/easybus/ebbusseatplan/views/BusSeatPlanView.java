@@ -13,6 +13,7 @@ import ph.easybus.ebbusseatplan.R;
 import ph.easybus.ebbusseatplan.databinding.ViewBusSeatPlanBinding;
 import ph.easybus.ebbusseatplan.listeners.RecyclerTouchListener;
 import ph.easybus.ebbusseatplan.models.BusSeat;
+import ph.easybus.ebbusseatplan.models.GridSeat;
 import ph.easybus.ebbusseatplan.viewmodels.BusSeatPlanViewModel;
 
 public class BusSeatPlanView extends LinearLayout implements RecyclerTouchListener.OnItemClickListener,
@@ -77,8 +78,44 @@ public class BusSeatPlanView extends LinearLayout implements RecyclerTouchListen
     public void onClick(View view, int position) {
         if (!enabled) { return; }
 
-        BusSeat seat = viewModel.getBusSeats().get(position);
+        GridSeat seat = viewModel.getSeats().get(position);
 
+        if (seat.isSelectable()) {
+            boolean process = true;
+            if (maxSelectedSeats > 0) {
+                if (viewModel.getSelectedSeats().size() >= maxSelectedSeats) {
+                    process = false;
+                    if (onMaxSeatsSelectedListener != null) onMaxSeatsSelectedListener.onMaxSeatSelected();
+                }
+
+                if (seat.isSelected()) process = true;
+            }
+
+            if (process) {
+                boolean selected = false;
+                if (!seat.isSelected()) {
+                    viewModel.getSelectedSeats().add(seat.getNum());
+                    selected = true;
+                } else {
+                    int selectedIndex = -1;
+                    for (int i = 0; i < viewModel.getSelectedSeats().size(); i++) {
+                        if (viewModel.getSelectedSeats().get(i) == seat.getNum()) {
+                            selectedIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (selectedIndex >= 0) {
+                        viewModel.getSelectedSeats().remove(selectedIndex);
+                        selected = false;
+                    }
+                }
+
+                if (onSeatSelectionListener != null) onSeatSelectionListener.onSeatSelected(seat, selected);
+            }
+        }
+
+        /*
         if (seat.getSeatType() == BusSeat.SEAT_TYPE_AVAILABLE ||
             seat.getSeatType() == BusSeat.SEAT_TYPE_PREMIUM) {
 
@@ -126,13 +163,13 @@ public class BusSeatPlanView extends LinearLayout implements RecyclerTouchListen
         }
 
         if (!seat.isReserved() && !seat.isSpace()) {
-        }
+        } */
     }
 
     public void onLongClick(View view, int position) {}
 
     public interface OnSeatSelectionListener {
-        void onSeatSelected(BusSeat busSeat, boolean selected);
+        void onSeatSelected(GridSeat busSeat, boolean selected);
     }
 
     public interface OnMaxSeatsSelectedListener {

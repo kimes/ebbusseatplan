@@ -6,19 +6,26 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ObservableArrayList;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 
+import ph.easybus.ebbusseatplan.models.BusSeat;
 import ph.easybus.ebbusseatplan.models.GridSeat;
 import ph.easybus.app.viewmodels.MainActivityViewModel;
 import ph.easybus.ebbusseatplan.app.R;
 import ph.easybus.ebbusseatplan.app.databinding.ActivityMainBinding;
 import ph.easybus.ebbusseatplan.layoutmanagers.SpannedGridLayoutManager;
 import ph.easybus.ebbusseatplan.listeners.RecyclerTouchListener;
+import ph.easybus.ebmodels.models.Bus;
+import ph.easybus.ebmodels.models.Reservation;
+import ph.easybus.ebmodels.models.Trip;
 
-public class MainActivity extends AppCompatActivity implements RecyclerTouchListener.OnItemClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final GridSeat NB_NW = new GridSeat(-1, -1, "A"),
             NB_N = new GridSeat(0, -1, "A"),
@@ -33,18 +40,19 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
 
     private static final GridSeat[] SQUARE_DIR = { NB_E, NB_SE, NB_S };
 
-    private String[] map = new String[] {
-            "AA_UL",
-            "AA_UL",
-            "AA_UL",
-            "AA_UL",
-            "AA_RR",
-            "AA_RR",
-            "AA_RR",
-            "AA_AA",
-            "AA_UL",
-            "AAAUL",
-    };
+    private ArrayList<String> map = new ArrayList<>(
+            Arrays.asList(
+                    "/D_UL",
+                    "/D_UL",
+                    "AA_UL",
+                    "AA_UL",
+                    "AA_RR",
+                    "AA_RR",
+                    "AA_UL",
+                    "AA_UL",
+                    "AA_UL",
+                    "AAAUL"
+            ));
 
     private int clickCounter = 0;
 
@@ -59,15 +67,31 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+        binding.setListener(this);
 
-        //binding.rvNumber.setLayoutManager(new SpannedGridLayoutManager(this, 40));
+        Bus bus = new Bus();
+        bus.setLayout("d");
+        bus.setSeatMap(map);
 
-        ArrayList<Integer> numbers = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            numbers.add(i);
-        }
-        viewModel.setNumbers(numbers);
+        Trip trip = new Trip();
+        trip.setBus(bus);
+        viewModel.setTrip(trip);
 
+        ObservableArrayList<Reservation> reservations = new ObservableArrayList<>();
+
+        ObservableArrayList<Integer> reservedSeats = new ObservableArrayList<>();
+
+        reservedSeats.addAll(Arrays.asList(1, 2, 3));
+
+        Reservation reservation = new Reservation();
+        reservation.setShortAlias("M");
+        reservation.setStatus(1);
+        reservation.setReservedSeats(reservedSeats);
+
+        reservations.add(reservation);
+        viewModel.setReservations(reservations);
+
+        /*
         int rows = map.length, cols = map[0].length();
 
         binding.rvSeats.setLayoutManager(new SpannedGridLayoutManager(this, 45,
@@ -81,28 +105,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
 
         RecyclerTouchListener.setup(this, binding.rvSeats, this);
 
-        calculateSeatPlan();
+        calculateSeatPlan(); */
     }
 
-    @Override
-    public void onClick(View view, int position) {
-        GridSeat seat = viewModel.getSeats().getValue().get(position);
-        if (seat.isSelectable()) {
-            int mod = clickCounter % 2;
-            if (mod == 0) {
-                seat.setSelected(!seat.isSelected());
-            } else {
-                seat.setReserved(!seat.isReserved());
-            }
-            clickCounter++;
-        }
-    }
+    public void onSeatSelected(GridSeat busSeat, boolean selected) {
 
-    @Override
-    public void onLongClick(View view, int position) {}
-
-    private void calculateSeatPlan() {
-        new Thread(() -> {
-        }).start();
     }
 }

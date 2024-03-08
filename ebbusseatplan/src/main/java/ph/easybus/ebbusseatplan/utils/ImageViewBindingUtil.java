@@ -17,17 +17,17 @@ import ph.easybus.ebmodels.models.Reservation;
 
 public class ImageViewBindingUtil {
 
-    @BindingAdapter({ "selected", "isCustomersView", "reservation" })
-    public static void setReservation(ImageView imageView, boolean selected,
-                                      boolean isCustomersView, Reservation reservation) {
+    @BindingAdapter({ "colorSelected", "colorReserved", "isCustomersView" })
+    public static void setReservation(ImageView imageView, boolean selected, boolean reserved,
+                                      boolean isCustomersView) {
         Context context = imageView.getContext();
 
         imageView.setColorFilter(ContextCompat.getColor(context, R.color.gray10));
-        if (reservation != null) {
+        if (selected) {
             imageView.setColorFilter(ContextCompat.getColor(context, R.color.white));
         }
 
-        if (selected) {
+        if (reserved) {
             imageView.setColorFilter(ContextCompat.getColor(context, R.color.white));
         }
 
@@ -48,10 +48,12 @@ public class ImageViewBindingUtil {
             seatId = R.drawable.ic_seat_available;
             if (selected) seatId = R.drawable.ic_seat_selected;
             if (reserved) seatId = R.drawable.ic_seat_reserved;
-
-        } else if ("/".equals(seatType)) {
+        } else if ("D".equals(seatType) || "/".equals(seatType)) {
             if (isCustomersView) seatId = R.drawable.ic_seat_reserved;
             else seatId = R.drawable.ic_seat_available;
+
+            if (selected) seatId = R.drawable.ic_seat_selected;
+            if (reserved) seatId = R.drawable.ic_seat_reserved;
         } else if ("X".equals(seatType)) {
             seatId = R.drawable.ic_seat_reserved;
         } else if ("U".equals(seatType)) {

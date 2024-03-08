@@ -9,51 +9,147 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:padding="3dp"
         android:gravity="center"
         android:clipToPadding="false">
 
         <!-- HACK FOR SHADOW -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="2dp" android:layout_marginBottom="2dp"
-            android:layout_marginStart="2dp" android:layout_marginEnd="2dp"
-            android:background="@drawable/bg_seat"
-            android:elevation="3dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            shadowSeatType="@{seat.type}"
-            shadowReserved="@{seat.reserved}" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:src="@drawable/ic_bed_lower_available"
-            android:scaleType="fitXY"
-            android:translationZ="15dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            seatType="@{seat.type}"
-            reserved="@{seat.reserved}"
-            selected="@{seat.selected}"
-            isCustomersView="@{false}" />
-
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text='@{String.format("%s", seat.num)}'
-            android:translationZ="15dp"
-            android:visibility="@{seat.showSeat ? View.VISIBLE : View.GONE}"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            seatTextSelected="@{seat.selected}"
-            seatTextReserved="@{seat.reserved}" />
+            android:layout_height="match_parent"
+            android:padding="3dp"
+            android:clipToPadding="false">
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="2dp" android:layout_marginBottom="2dp"
+                android:layout_marginStart="2dp" android:layout_marginEnd="2dp"
+                android:background="@drawable/bg_seat"
+                android:elevation="3dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                shadowSeatType="@{seat.type}"
+                shadowReserved="@{seat.reserved}" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_bed_lower_available"
+                android:scaleType="fitXY"
+                android:translationZ="15dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                seatType="@{seat.type}"
+                reserved="@{seat.reserved}"
+                selected="@{seat.selected}"
+                isCustomersView="@{false}" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text='@{String.format("%s", seat.num)}'
+                android:textSize="14sp"
+                android:translationZ="15dp"
+                android:visibility='@{seat.showSeat ? ("D".equals(seat.type) ? View.GONE : View.VISIBLE) : View.GONE}'
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                seatTextSelected="@{seat.selected}"
+                seatTextReserved="@{seat.reserved}" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:src="@drawable/ic_pwd"
+                android:translationZ="15dp"
+                android:visibility='@{"D".equals(seat.type) ? View.VISIBLE : View.GONE}'
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                colorReserved="@{seat.reserved}"
+                colorSelected="@{seat.selected}"
+                isCustomersView="@{seat.seatPlan.isCustomersView}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <RelativeLayout
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@drawable/badge_default"
+            android:visibility='@{seat.seatPlan.isCustomersView ? View.GONE : ("D".equals(seat.type) || "/".equals(seat.type) ? View.VISIBLE : View.GONE)}'
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="8dp"
+                android:textColor="@color/gray10"
+                android:text='@{String.format("%d", seat.num)}'
+                android:visibility='@{seat.seatPlan.isCustomersView ? View.GONE : ("D".equals(seat.type) ? View.VISIBLE : View.GONE)}' />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="8dp"
+                android:textColor="@color/gray10"
+                android:text="/"
+                android:visibility='@{seat.seatPlan.isCustomersView ? View.GONE : ("/".equals(seat.type) ? View.VISIBLE : View.GONE)}' />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:translationZ="15dp"
+            android:visibility="@{seat.seatPlan.isCustomersView ? View.GONE : (seat.reserved ? View.VISIBLE : View.GONE)}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <RelativeLayout
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/badge_pending"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                badgeReservation="@{seat.reservation.status}"
+                badgeReservationOwnOffice="@{seat.seatPlan.office}"
+                badgeReservationOffice="@{seat.reservation.shortAlias}">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_pencil"
+                    badgeReservationValue="@{seat.reservation.status}"
+                    badgeReservationValueMode="@{0}"
+                    badgeReservationValueOwnOffice="@{seat.seatPlan.office}"
+                    badgeReservationValueOffice="@{seat.reservation.shortAlias}" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="8dp"
+                    android:textColor="@color/white"
+                    android:text="@{seat.reservation.shortAlias}"
+                    badgeReservationValue="@{seat.reservation.status}"
+                    badgeReservationValueMode="@{1}"
+                    badgeReservationValueOwnOffice="@{seat.seatPlan.office}"
+                    badgeReservationValueOffice="@{seat.reservation.shortAlias}" />
+
+            </RelativeLayout>
+        </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

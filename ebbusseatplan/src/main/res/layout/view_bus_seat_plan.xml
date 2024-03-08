@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:overScrollMode="never"
             columns="@{viewModel.columns}"
-            busSeats="@{viewModel.busSeats}" />
+            rows="@{viewModel.rows}"
+            seats="@{viewModel.seats}" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

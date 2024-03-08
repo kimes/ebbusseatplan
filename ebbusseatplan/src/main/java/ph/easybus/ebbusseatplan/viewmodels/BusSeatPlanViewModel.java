@@ -75,9 +75,10 @@ public class BusSeatPlanViewModel extends BaseObservable {
         notifyPropertyChanged(BR.office);
     }
 
+    /*
     private ArrayList<BusSeat> busSeats;
     @Bindable
-    public ArrayList<BusSeat> getBusSeats() { return busSeats; }
+    public ArrayList<BusSeat> getBusSeats() { return busSeats; } */
 
     private ArrayList<GridSeat> seats;
     @Bindable
@@ -97,9 +98,9 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                                 int positionStart, int itemCount) {
                     for (int i = positionStart; i < itemCount; i++) {
                         int selectedSeat = sender.get(i);
-                        for (int j = 0; j < busSeats.size(); j++) {
-                            BusSeat seat = busSeats.get(j);
-                            if (seat.getSeatNumber() == selectedSeat) {
+                        for (int j = 0; j < seats.size(); j++) {
+                            GridSeat seat = seats.get(j);
+                            if (seat.getNum() == selectedSeat) {
                                 seat.setSelected(true);
                             }
                         }
@@ -108,10 +109,10 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                 public void onItemRangeRemoved(ObservableList<Integer> sender,
                                                int positionStart, int itemCount) {
-                    for (int i = 0; i < busSeats.size(); i++) {
-                        BusSeat seat = busSeats.get(i);
+                    for (int i = 0; i < seats.size(); i++) {
+                        GridSeat seat = seats.get(i);
                         if (seat.isSelected()) {
-                            if (sender.contains(seat.getSeatNumber())) seat.setSelected(false);
+                            if (sender.contains(seat.getNum())) seat.setSelected(false);
                             else seat.setSelected(false);
                         }
                     }
@@ -143,8 +144,8 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                 public void onItemRangeRemoved(ObservableList<Reservation> sender,
                                                 int positionStart, int itemCount) {
-                    for (int i = 0; i < busSeats.size(); i++) {
-                        BusSeat seat = busSeats.get(i);
+                    for (int i = 0; i < seats.size(); i++) {
+                        GridSeat seat = seats.get(i);
                         if (seat.isReserved()) {
                             boolean existOnList = false;
                             for (int j = 0; j < sender.size(); j++) {
@@ -158,7 +159,6 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                 }
                             }
                             if (!existOnList) {
-                                seat.setSeatType(BusSeat.SEAT_TYPE_AVAILABLE);
                                 seat.setReserved(false);
                                 seat.setReservation(null);
                             }
@@ -171,10 +171,9 @@ public class BusSeatPlanViewModel extends BaseObservable {
                     for (int i = positionStart; i < itemCount; i++) {
                         Reservation reservation = sender.get(i);
                         for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
-                            for (int k = 0; k < busSeats.size(); k++) {
-                                BusSeat seat = busSeats.get(k);
-                                if (seat.getSeatNumber() == reservation.getReservedSeats().get(j)) {
-                                    seat.setSeatType(BusSeat.SEAT_TYPE_OCCUPIED);
+                            for (int k = 0; k < seats.size(); k++) {
+                                GridSeat seat = seats.get(k);
+                                if (seat.getNum() == reservation.getReservedSeats().get(j)) {
                                     seat.setReserved(true);
                                     seat.setReservation(reservation);
                                 }
@@ -207,14 +206,13 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
     private void calculateReservedSeats() {
         new Thread(() -> {
-            if (busSeats != null && reservations != null) {
+            if (seats != null && reservations != null) {
                 for (int i = 0; i < reservations.size(); i++) {
                     Reservation reservation = reservations.get(i);
                     for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
-                        for (int k = 0; k < busSeats.size(); k++) {
-                            BusSeat seat = busSeats.get(k);
-                            if (seat.getSeatNumber() == reservation.getReservedSeats().get(j)) {
-                                seat.setSeatType(BusSeat.SEAT_TYPE_OCCUPIED);
+                        for (int k = 0; k < seats.size(); k++) {
+                            GridSeat seat = seats.get(k);
+                            if (seat.getNum() == reservation.getReservedSeats().get(j)) {
                                 seat.setReserved(true);
                                 seat.setReservation(reservation);
                             }
@@ -227,12 +225,11 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
     private void calculateSelectedSeats() {
         new Thread(() -> {
-            if (busSeats != null && selectedSeats != null) {
+            if (seats != null && selectedSeats != null) {
                 for (int i = 0; i < selectedSeats.size(); i++) {
-                    for (int j = 0; j < busSeats.size(); j++) {
-                        BusSeat seat = busSeats.get(j);
-                        if (seat.getSeatNumber() == selectedSeats.get(i))
-                            seat.setSelected(true);
+                    for (int j = 0; j < seats.size(); j++) {
+                        GridSeat seat = seats.get(j);
+                        if (seat.getNum() == selectedSeats.get(i)) seat.setSelected(true);
                     }
                 }
             }
@@ -244,6 +241,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
             seatPlanFinished = false;
             Trip currTrip = BusSeatPlanViewModel.this.trip;
             if (currTrip == null) return;
+
             Bus bus = currTrip.getBus();
             String layout = bus.getLayout().isEmpty() ? "d" : bus.getLayout();
 
@@ -252,10 +250,8 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
             columns = c;
             rows = r;
-
             notifyPropertyChanged(BR.columns);
             notifyPropertyChanged(BR.rows);
-
 
             String[][] seatMapMatrix = new String[r][c];
             for (int i = 0; i < bus.getSeatMap().size(); i++) {
@@ -278,6 +274,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
                     if (!usedCell.contains(id)) {
                         String type = seatMapMatrix[i][j];
                         GridSeat seat = new GridSeat(j, i, type);
+                        seat.setSeatPlan(this);
                         seat.setSelectable("A".equals(type) || "U".equals(type) ||
                                 "L".equals(type) || "C".equals(type));
 
@@ -366,6 +363,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
             BusSeatPlanViewModel.this.seats = seats;
 
+            /*
             for (int i = 0; i < currTrip.getChoiceSeats().size(); i++) {
                 for (int j = 0; j < seats.size(); j++) {
                     if (currTrip.getChoiceSeats().get(i) == seats.get(j).getNum()) {
@@ -375,6 +373,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
                     }
                 }
             }
+             */
 
             /*
             int seatCounter = 1;

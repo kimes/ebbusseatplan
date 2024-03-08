@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <variable name="listener" type="ph.easybus.app.activities.MainActivity" />
         <variable name="viewModel" type="ph.easybus.app.viewmodels.MainActivityViewModel" />
     </data>
 
@@ -14,11 +15,15 @@
             android:layout_height="wrap_content"
             android:text="Kimuel" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_seats"
-            android:layout_width="match_parent"
+        <ph.easybus.ebbusseatplan.views.BusSeatPlanView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            seats="@{viewModel.seats}" />
+            trip="@{viewModel.trip}"
+            selectedSeats="@={viewModel.selectedSeats}"
+            office='@{"M"}'
+            onSelectedSeatsChanged="@{listener::onSeatSelected}"
+            reservations="@{viewModel.reservations}"
+            maxSelectedSeats="@{6}"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
