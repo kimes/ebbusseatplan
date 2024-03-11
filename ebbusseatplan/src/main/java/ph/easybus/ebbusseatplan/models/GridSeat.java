@@ -15,6 +15,7 @@ public class GridSeat extends BaseObservable {
     private boolean selected = false, reserved = false;
 
     private int x = 0, y = 0, w = 1, h = 1, side = 0;
+    
     private int num = -1;
 
     private String type = "A";

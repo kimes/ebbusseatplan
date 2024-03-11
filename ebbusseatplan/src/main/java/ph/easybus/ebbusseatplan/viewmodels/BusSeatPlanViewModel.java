@@ -362,82 +362,6 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
             BusSeatPlanViewModel.this.seats = seats;
 
-            /*
-            for (int i = 0; i < currTrip.getChoiceSeats().size(); i++) {
-                for (int j = 0; j < seats.size(); j++) {
-                    if (currTrip.getChoiceSeats().get(i) == seats.get(j).getNum()) {
-                        //seats.get(j).setSeatType(BusSeat.SEAT_TYPE_PREMIUM);
-                        seats.get(j).setType("C");
-                        break;
-                    }
-                }
-            }
-             */
-
-            /*
-            int seatCounter = 1;
-            ArrayList<BusSeat> busSeats = new ArrayList<>();
-            if (layout.equals("d")) {
-                for (int i = 0; i < bus.getSeatMap().size(); i++) {
-                    String row = bus.getSeatMap().get(i);
-                    for (int j = 0; j < row.length(); j++) {
-                        int actualSeatNumber = 0;
-                        if (row.charAt(j) != '_') {
-                            actualSeatNumber = seatCounter;
-                            seatCounter++;
-                        }
-
-                        BusSeat seat = createBusSeat(actualSeatNumber, row.charAt(j));
-                        if (selectedSeats != null) {
-                            for (int k = 0; k < selectedSeats.size(); k++) {
-                                if (selectedSeats.get(k) == actualSeatNumber) {
-                                    seat.setSelected(true);
-                                }
-                            }
-                        }
-                        busSeats.add(seat);
-                    }
-                }
-            } else if (layout.equals("r")) {
-                for (int i = 0; i < bus.getSeatMap().size(); i++) {
-                    int colMaxSeats = 0, currColSeat = 1;
-                    String row = bus.getSeatMap().get(i);
-                    for (int j = 0; j < row.length(); j++) {
-                        if (row.charAt(j) != '_') colMaxSeats++;
-                    }
-
-                    for (int j = 0; j < row.length(); j++) {
-                        int actualSeatNumber = 0;
-                        if (row.charAt(j) != '_') {
-                            actualSeatNumber = seatCounter + colMaxSeats - currColSeat;
-                            currColSeat++;
-                        }
-
-                        BusSeat seat = createBusSeat(actualSeatNumber, row.charAt(j));
-                        if (selectedSeats != null) {
-                            for (int k = 0; k < selectedSeats.size(); k++) {
-                                if (selectedSeats.get(k) == actualSeatNumber) {
-                                    seat.setSelected(true);
-                                }
-                            }
-                        }
-                        busSeats.add(seat);
-                    }
-                    seatCounter += colMaxSeats;
-                }
-            }
-
-            for (int i = 0; i < currTrip.getChoiceSeats().size(); i++) {
-                for (int j = 0; j < busSeats.size(); j++) {
-                    if (currTrip.getChoiceSeats().get(i) == busSeats.get(j).getSeatNumber()) {
-                        busSeats.get(j).setSeatType(BusSeat.SEAT_TYPE_PREMIUM);
-                        break;
-                    }
-                }
-            }
-
-            BusSeatPlanViewModel.this.busSeats = busSeats;  */
-
             notifyPropertyChanged(BR.seats);
             calculateReservedSeats();
 
@@ -544,17 +468,14 @@ public class BusSeatPlanViewModel extends BaseObservable {
                 }
 
                 if (row.size() > 0) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        /*
-                        row.sort((a, b) -> (a.getX() < b.getX()) ? -1 : 1);
+                    /*
+                    row.sort((a, b) -> (a.getX() < b.getX()) ? -1 : 1);
 
-                        if (row.get(0).getX() == x) {
-                            // ADD NEIGHBOURS TO ROW
-                        } */
-
-                        for (int j = 0; j < row.size(); j++) {
-                            neighboursToRow.add(row.get(j).getX());
-                        }
+                    if (row.get(0).getX() == x) {
+                        // ADD NEIGHBOURS TO ROW
+                    } */
+                    for (int j = 0; j < row.size(); j++) {
+                        neighboursToRow.add(row.get(j).getX());
                     }
                 }
             }
@@ -581,17 +502,15 @@ public class BusSeatPlanViewModel extends BaseObservable {
                 }
 
                 if (row.size() > 0) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        /*
-                        row.sort((a, b) -> (a.getX() < b.getX()) ? -1 : 1);
+                    /*
+                    row.sort((a, b) -> (a.getX() < b.getX()) ? -1 : 1);
 
-                        if (row.get(0).getY() == y) {
-                            // ADD NEIGHBOURS TO ROW
-                        } */
+                    if (row.get(0).getY() == y) {
+                        // ADD NEIGHBOURS TO ROW
+                    } */
 
-                        for (int j = 0; j < row.size(); j++) {
-                            neighboursToRow.add(row.get(j).getY());
-                        }
+                    for (int j = 0; j < row.size(); j++) {
+                        neighboursToRow.add(row.get(j).getY());
                     }
                 }
             }

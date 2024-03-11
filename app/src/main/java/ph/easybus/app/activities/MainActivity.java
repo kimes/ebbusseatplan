@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
                     "AA_uR",
                     "AA_UL",
                     "AA_UL",
-                    "AA_UL",
-                    "AAAUL"
+                    "UU_UL",
+                    "LL_UL"
             ));
 
     private int clickCounter = 0;

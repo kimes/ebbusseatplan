@@ -37,9 +37,9 @@ public class ImageViewBindingUtil {
         }
     }
 
-    @BindingAdapter(value = { "seatType", "reserved", "selected", "isCustomersView" }, requireAll = false)
+    @BindingAdapter(value = { "seatType", "reserved", "selected", "side", "isCustomersView" }, requireAll = false)
     public static void setBedSeat(AppCompatImageView view,
-                                  String seatType, boolean reserved, boolean selected,
+                                  String seatType, boolean reserved, boolean selected, int side,
                                   boolean isCustomersView) {
         Resources res = view.getResources();
         Resources.Theme theme = view.getContext().getTheme();
@@ -61,14 +61,32 @@ public class ImageViewBindingUtil {
             seatId = R.drawable.ic_bed_upper_available;
             if (selected) seatId = R.drawable.ic_bed_upper_selected;
             if (reserved) seatId = R.drawable.ic_bed_upper_blocked;
+
+            if (side == 0) {
+                seatId = R.drawable.ic_bed_upper_available_landscape;
+                if (selected) seatId = R.drawable.ic_bed_upper_selected_landscape;
+                if (reserved) seatId = R.drawable.ic_bed_upper_blocked_landscape;
+            }
         } else if ("L".equals(seatType)) {
             seatId = R.drawable.ic_bed_lower_available;
             if (selected) seatId = R.drawable.ic_bed_lower_selected;
             if (reserved) seatId = R.drawable.ic_bed_lower_blocked;
+
+            if (side == 0) {
+                seatId = R.drawable.ic_bed_lower_available_landscape;
+                if (selected) seatId = R.drawable.ic_bed_lower_selected_landscape;
+                if (reserved) seatId = R.drawable.ic_bed_lower_blocked_landscape;
+            }
         } else if ("u".equals(seatType)) {
             seatId = R.drawable.ic_bed_upper_blocked;
+            if (side == 0) {
+                seatId = R.drawable.ic_bed_upper_blocked_landscape;
+            }
         } else if ("l".equals(seatType)) {
             seatId = R.drawable.ic_bed_lower_blocked;
+            if (side == 0) {
+                seatId = R.drawable.ic_bed_lower_blocked_landscape;
+            }
         } else if ("R".equals(seatType)) {
             seatId = R.drawable.ic_cr;
         }

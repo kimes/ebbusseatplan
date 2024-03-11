@@ -46,6 +46,7 @@
                 seatType="@{seat.type}"
                 reserved="@{seat.reserved}"
                 selected="@{seat.selected}"
+                side="@{seat.side}"
                 isCustomersView="@{false}" />
 
             <androidx.appcompat.widget.AppCompatTextView
