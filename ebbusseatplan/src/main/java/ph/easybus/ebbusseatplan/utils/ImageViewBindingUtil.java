@@ -88,7 +88,7 @@ public class ImageViewBindingUtil {
                 seatId = R.drawable.ic_bed_lower_blocked_landscape;
             }
         } else if ("R".equals(seatType)) {
-            seatId = R.drawable.ic_cr;
+            seatId = R.drawable.bg_cr;
         }
 
         //view.setBackground(ResourcesCompat.getDrawable(res, seatId, theme));

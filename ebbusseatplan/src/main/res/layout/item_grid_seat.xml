@@ -80,8 +80,24 @@
                 colorSelected="@{seat.selected}"
                 isCustomersView="@{seat.seatPlan.isCustomersView}" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_cr"
+                android:translationZ="15dp"
+                android:visibility='@{"R".equals(seat.type) ? View.VISIBLE : View.GONE}'
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintWidth_min="15dp"
+                app:layout_constraintWidth_max="40dp"
+                app:layout_constraintHeight_min="15dp"
+                app:layout_constraintHeight_max="40dp" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
             android:layout_width="15dp"

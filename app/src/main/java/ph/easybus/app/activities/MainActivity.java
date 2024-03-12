@@ -42,12 +42,12 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> map = new ArrayList<>(
             Arrays.asList(
+                    "RR_UL",
                     "/D_UL",
-                    "/D_UL",
+                    "RA_UL",
                     "AA_UL",
-                    "AA_UL",
-                    "AA_uR",
-                    "AA_uR",
+                    "RR_uR",
+                    "RR_uR",
                     "AA_UL",
                     "AA_UL",
                     "UU_UL",
