@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                     "RR_UL",
                     "/D_UL",
                     "RA_UL",
-                    "AA_UL",
+                    "//_UL",
                     "RR_uR",
                     "RR_uR",
                     "AA_UL",

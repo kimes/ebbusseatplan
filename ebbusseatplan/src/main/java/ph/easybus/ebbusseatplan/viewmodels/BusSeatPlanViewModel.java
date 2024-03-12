@@ -276,7 +276,8 @@ public class BusSeatPlanViewModel extends BaseObservable {
                         GridSeat seat = new GridSeat(j, i, type);
                         seat.setSeatPlan(this);
                         seat.setSelectable("A".equals(type) || "U".equals(type) ||
-                                "L".equals(type) || "C".equals(type) || "D".equals(type));
+                                "L".equals(type) || "C".equals(type) ||
+                                "D".equals(type) || "/".equals(type));
 
                         if ("A".equals(type) || "C".equals(type) ||
                             "X".equals(type) || "D".equals(type) || "/".equals(type)) {
