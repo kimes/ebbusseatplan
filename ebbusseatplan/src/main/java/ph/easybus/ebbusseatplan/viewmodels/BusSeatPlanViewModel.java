@@ -255,12 +255,12 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
             String[][] seatMapMatrix = new String[r][c];
             for (int i = 0; i < bus.getSeatMap().size(); i++) {
-                String[] seatMapCols = bus.getSeatMap().get(i).split("");
+                char[] seatMapCols = bus.getSeatMap().get(i).toCharArray();
                 //System.arraycopy(seatMapCols, 0, seatMapMatrix[i], 0, seatMapCols.length);
-                System.out.println("Seat Map Cols: " + bus.getSeatMap().get(i) + " | " + seatMapCols.length);
+
                 String[] columns = new String[seatMapCols.length];
                 for (int j = 0; j < seatMapCols.length; j++) {
-                    columns[j] = seatMapCols[j];
+                    columns[j] = seatMapCols[j] + "";
                 }
                 seatMapMatrix[i] = columns;
             }
