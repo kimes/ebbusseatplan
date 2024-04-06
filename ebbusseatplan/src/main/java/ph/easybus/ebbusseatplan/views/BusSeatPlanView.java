@@ -81,7 +81,10 @@ public class BusSeatPlanView extends LinearLayout implements RecyclerTouchListen
         GridSeat seat = viewModel.getSeats().get(position);
 
         if (seat.isSelectable()) {
+
             boolean process = true;
+            if (seat.isReserved()) process = false;
+
             if (maxSelectedSeats > 0) {
                 if (viewModel.getSelectedSeats().size() >= maxSelectedSeats) {
                     process = false;
