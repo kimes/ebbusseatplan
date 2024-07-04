@@ -2,6 +2,8 @@ package ph.easybus.app.activities;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,6 +56,20 @@ public class MainActivity extends AppCompatActivity {
                     "LL_UL"
             ));
 
+    private ArrayList<ArrayList<Integer>> seatNumbers = new ArrayList<>(
+            Arrays.asList(
+                    new ArrayList<>(Arrays.asList(0, 0, 0, 3, 4)),
+                    new ArrayList<>(Arrays.asList(1, 2, 0, 3, 4)),
+                    new ArrayList<>(Arrays.asList(0, 7, 0, 5, 6)),
+                    new ArrayList<>(Arrays.asList(9, 8, 0, 5, 6)),
+                    new ArrayList<>(Arrays.asList(0, 0, 0, 10, 0)),
+                    new ArrayList<>(Arrays.asList(0, 0, 0, 10, 0)),
+                    new ArrayList<>(Arrays.asList(11, 13, 0, 16, 15)),
+                    new ArrayList<>(Arrays.asList(12, 14, 0, 16, 15)),
+                    new ArrayList<>(Arrays.asList(17, 17, 0, 18, 19)),
+                    new ArrayList<>(Arrays.asList(20, 20, 0, 18, 19))
+            ));
+
     private int clickCounter = 0;
 
     private MainActivityViewModel viewModel;
@@ -70,8 +86,24 @@ public class MainActivity extends AppCompatActivity {
         binding.setListener(this);
 
         Bus bus = new Bus();
-        bus.setLayout("d");
+        bus.setLayout("c");
         bus.setSeatMap(map);
+        bus.setSeatNumbers(seatNumbers);
+
+        Parcel parcel = Parcel.obtain();
+        bus.writeToParcel(parcel, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
+
+        Bus parcelBus = new Bus(parcel);
+        String builder = "";
+        for (int i = 0; i < parcelBus.getSeatNumbers().size(); i++) {
+            for (int j = 0; j < parcelBus.getSeatNumbers().get(i).size(); j++) {
+                builder += parcelBus.getSeatNumbers().get(i).get(j) + " | ";
+            }
+            builder += "\n";
+        }
+        System.out.println("parcel bus: " + builder);
+
+        parcel.recycle();
 
         Trip trip = new Trip();
         trip.setBus(bus);

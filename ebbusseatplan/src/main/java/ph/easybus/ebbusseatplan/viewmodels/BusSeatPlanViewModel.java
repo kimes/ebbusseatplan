@@ -367,6 +367,15 @@ public class BusSeatPlanViewModel extends BaseObservable {
                 }
             }
 
+            if ("c".equals(layout)) {
+                for (int i = 0; i < seats.size(); i++) {
+                    GridSeat currGridSeat = seats.get(i);
+                    currGridSeat.setNum(bus.getSeatNumbers()
+                                        .get(currGridSeat.getY())
+                                        .get(currGridSeat.getX()));
+                }
+            }
+
             BusSeatPlanViewModel.this.seats = seats;
 
             notifyPropertyChanged(BR.seats);
