@@ -23,7 +23,8 @@
             office='@{"M"}'
             onSelectedSeatsChanged="@{listener::onSeatSelected}"
             reservations="@{viewModel.reservations}"
-            maxSelectedSeats="@{6}"/>
+            maxSelectedSeats="@{6}"
+            isCustomersView="@{true}" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"

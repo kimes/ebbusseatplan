@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         bus.setSeatMap(map);
         bus.setSeatNumbers(seatNumbers);
 
+        /*
         Parcel parcel = Parcel.obtain();
         bus.writeToParcel(parcel, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
 
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         }
         System.out.println("parcel bus: " + builder);
 
-        parcel.recycle();
+        parcel.recycle(); */
 
         Trip trip = new Trip();
         trip.setBus(bus);

@@ -292,6 +292,13 @@ public class BusSeatPlanViewModel extends BaseObservable {
                             seatCounter++;
                         }
 
+                        if (isCustomersView) {
+                            if ("X".equals(type) || "D".equals(type) || "/".equals(type)) {
+                                seat.setSelectable(false);
+                                seat.setReserved(true);
+                            }
+                        }
+
                         if ("U".equals(type) || "L".equals(type) || "u".equals(type) || "l".equals(type)) {
                             ArrayList<GridSeat> n = getOrientationNeighbours(j, i, type, seatMapMatrix);
                             n.add(new GridSeat(j, i, 0));
