@@ -285,8 +285,12 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                 "L".equals(type) || "C".equals(type) ||
                                 "D".equals(type) || "/".equals(type));
 
+
                         if ("A".equals(type) || "C".equals(type) ||
                             "X".equals(type) || "D".equals(type) || "/".equals(type)) {
+
+                            System.out.println("SEAT NUMBERS: " + type + ": " + seatCounter + " to ");
+
                             seat.setNum(seatCounter);
                             seat.setNumberable(true);
                             seatCounter++;

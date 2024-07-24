@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> map = new ArrayList<>(
             Arrays.asList(
-                    "RR_UL",
+                    "CC_UL",
                     "/D_UL",
                     "RA_UL",
                     "//_UL",
@@ -86,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
         binding.setListener(this);
 
         Bus bus = new Bus();
-        bus.setLayout("c");
+        //bus.setLayout("c");
+        bus.setLayout("d");
         bus.setSeatMap(map);
         bus.setSeatNumbers(seatNumbers);
 
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         ObservableArrayList<Integer> reservedSeats = new ObservableArrayList<>();
 
-        reservedSeats.addAll(Arrays.asList(1, 2, 3));
+        reservedSeats.addAll(Arrays.asList(13, 14));
 
         Reservation reservation = new Reservation();
         reservation.setShortAlias("M");

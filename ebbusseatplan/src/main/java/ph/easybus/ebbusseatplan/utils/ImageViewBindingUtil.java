@@ -57,6 +57,11 @@ public class ImageViewBindingUtil {
             if (reserved) seatId = R.drawable.ic_seat_reserved;
         } else if ("X".equals(seatType)) {
             seatId = R.drawable.ic_seat_reserved;
+        } else if ("C".equals(seatType)) {
+            seatId = R.drawable.ic_seat_premium;
+
+            if (selected) seatId = R.drawable.ic_seat_selected;
+            if (reserved) seatId = R.drawable.ic_seat_reserved;
         } else if ("U".equals(seatType)) {
             seatId = R.drawable.ic_bed_upper_available;
             if (selected) seatId = R.drawable.ic_bed_upper_selected;
