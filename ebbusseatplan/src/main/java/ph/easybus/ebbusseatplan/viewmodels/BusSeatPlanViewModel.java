@@ -253,7 +253,9 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
     private void calculateReservedSeats() {
         new Thread(() -> {
-            Bus bus = trip.getBus();
+            Trip currTrip = BusSeatPlanViewModel.this.trip;
+            if (currTrip == null) return;
+            Bus bus = currTrip.getBus();
 
             if (seats != null && reservations != null) {
                 if (bus.isUseAlias()) {
@@ -293,7 +295,9 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
     private void calculateSelectedSeats() {
         new Thread(() -> {
-            Bus bus = trip.getBus();
+            Trip currTrip = BusSeatPlanViewModel.this.trip;
+            if (currTrip == null) return;
+            Bus bus = currTrip.getBus();
 
             if (bus.isUseAlias()) {
                 if (seats != null && selectedSeatsAlias != null) {
