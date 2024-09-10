@@ -52,13 +52,19 @@ public class BusSeatPlanViewBindingUtil {
         seatPlanView.setEnabled(enabled);
     }
 
-    @BindingAdapter(value = { "onSelectedSeatsChanged", "selectedSeatsAttrChanged" }, requireAll = false)
-    public static void setSelectedSeatsListener(BusSeatPlanView seatPlanView,
-                                                final BusSeatPlanView.OnSeatSelectionListener listener,
-                                                final InverseBindingListener bindingListener) {
-        seatPlanView.setOnSeatSelectionListener((seatNumber, selected) -> {
-            if (bindingListener != null) bindingListener.onChange();
+    @BindingAdapter("onSelectedSeatsChanged")
+    public static void setOnSelectedSeatsChanged(BusSeatPlanView seatPlanView,
+                                                 final BusSeatPlanView.OnSeatSelectionListener listener) {
+        seatPlanView.addOnSeatSelectionListeners((seatNumber, selected) -> {
             if (listener != null) listener.onSeatSelected(seatNumber, selected);
+        });
+    }
+
+    @BindingAdapter("selectedSeatsAttrChanged")
+    public static void setSelectedSeatsListener(BusSeatPlanView seatPlanView,
+                                                final InverseBindingListener bindingListener) {
+        seatPlanView.addOnSeatSelectionListeners((seatNumber, selected) -> {
+            if (bindingListener != null) bindingListener.onChange();
         });
     }
 
@@ -74,4 +80,24 @@ public class BusSeatPlanViewBindingUtil {
         return seatPlanView.getViewModel().getSelectedSeats();
     }
 
+    @BindingAdapter("selectedSeatsAliasAttrChanged")
+    public static void setSelectedSeatsAliasListener(BusSeatPlanView seatPlanView,
+                                                     final InverseBindingListener bindingListener) {
+        seatPlanView.addOnSeatSelectionListeners((seatNumber, selected) -> {
+            if (bindingListener != null) bindingListener.onChange();
+        });
+    }
+
+    @BindingAdapter("selectedSeatsAlias")
+    public static void setSelectedSeatsAlias(BusSeatPlanView seatPlanView,
+                                             ObservableArrayList<String> selectedSeats) {
+        if (selectedSeats != null) {
+            seatPlanView.getViewModel().setSelectedSeatsAlias(selectedSeats);
+        }
+    }
+
+    @InverseBindingAdapter(attribute = "selectedSeatsAlias", event = "selectedSeatsAliasAttrChanged")
+    public static ObservableArrayList<String> getSelectedSeatsAlias(BusSeatPlanView seatPlanView) {
+        return seatPlanView.getViewModel().getSelectedSeatsAlias();
+    }
 }

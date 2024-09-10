@@ -20,6 +20,8 @@ public class GridSeat extends BaseObservable {
 
     private String type = "A";
 
+    private String seatAlias = "";
+
     @Bindable
     private Reservation reservation;
 
@@ -52,6 +54,7 @@ public class GridSeat extends BaseObservable {
     public int getSide() { return side; }
     public int getNum() { return num; }
     public String getType() { return type; }
+    public String getSeatAlias() { return seatAlias; }
     public Reservation getReservation() { return reservation; }
     public BusSeatPlanViewModel getSeatPlan() { return seatPlan; }
 
@@ -73,6 +76,7 @@ public class GridSeat extends BaseObservable {
     public void setSide(int side) { this.side = side; }
     public void setNum(int num) { this.num = num; }
     public void setType(String type) { this.type = type; }
+    public void setSeatAlias(String seatAlias) { this.seatAlias = seatAlias; }
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
         notifyPropertyChanged(BR.reservation);

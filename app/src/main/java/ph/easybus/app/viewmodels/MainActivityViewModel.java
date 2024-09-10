@@ -17,6 +17,10 @@ public class MainActivityViewModel extends ViewModel {
             new MutableLiveData<>(new ObservableArrayList<>());
     public MutableLiveData<ObservableArrayList<Integer>> getSelectedSeats() { return selectedSeats; }
 
+    private MutableLiveData<ObservableArrayList<String>> selectedSeatsAlias =
+            new MutableLiveData<>(new ObservableArrayList<>());
+    public MutableLiveData<ObservableArrayList<String>> getSelectedSeatsAlias() { return selectedSeatsAlias; }
+
     private MutableLiveData<ObservableArrayList<Reservation>> reservations =
             new MutableLiveData<>(new ObservableArrayList<>());
     public LiveData<ObservableArrayList<Reservation>> getReservations() { return reservations; }

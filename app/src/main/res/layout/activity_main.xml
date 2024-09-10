@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             trip="@{viewModel.trip}"
             selectedSeats="@={viewModel.selectedSeats}"
+            selectedSeatsAlias="@={viewModel.selectedSeatsAlias}"
             office='@{"M"}'
             onSelectedSeatsChanged="@{listener::onSeatSelected}"
             reservations="@{viewModel.reservations}"

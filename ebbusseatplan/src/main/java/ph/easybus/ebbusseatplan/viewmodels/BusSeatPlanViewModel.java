@@ -128,6 +128,53 @@ public class BusSeatPlanViewModel extends BaseObservable {
         calculateSelectedSeats();
     }
 
+    private ObservableArrayList<String> selectedSeatsAlias = new ObservableArrayList<>();
+    @Bindable
+    public ObservableArrayList<String> getSelectedSeatsAlias() { return selectedSeatsAlias; }
+
+    private ObservableList.OnListChangedCallback<ObservableList<String>> selectedSeatsAliasCallback =
+            new ObservableList.OnListChangedCallback<ObservableList<String>>() {
+                public void onChanged(ObservableList<String> sender) {}
+                public void onItemRangeChanged(ObservableList<String> sender, int positionStart, int itemCount) {}
+                public void onItemRangeMoved(ObservableList<String> sender, int fromPosition, int toPosition, int itemCount) {}
+
+                public void onItemRangeInserted(ObservableList<String> sender,
+                                                int positionStart, int itemCount) {
+                    for (int i = positionStart; i < itemCount; i++) {
+                        String selectedSeat = sender.get(i);
+                        for (int j = 0; j < seats.size(); j++) {
+                            GridSeat seat = seats.get(j);
+                            if (seat.getSeatAlias().equals(selectedSeat)) {
+                                seat.setSelected(true);
+                            }
+                        }
+                    }
+                }
+
+                public void onItemRangeRemoved(ObservableList<String> sender,
+                                               int positionStart, int itemCount) {
+                    for (int i = 0; i < seats.size(); i++) {
+                        GridSeat seat = seats.get(i);
+                        if (seat.isSelected()) {
+                            if (sender.contains(seat.getSeatAlias())) seat.setSelected(false);
+                            else seat.setSelected(false);
+                        }
+                    }
+                }
+            };
+
+    public void setSelectedSeatsAlias(ObservableArrayList<String> selectedSeatsAlias) {
+        if (this.selectedSeatsAlias != null)
+            this.selectedSeatsAlias.removeOnListChangedCallback(selectedSeatsAliasCallback);
+
+        this.selectedSeatsAlias = selectedSeatsAlias;
+        if (this.selectedSeatsAlias != null)
+            this.selectedSeatsAlias.addOnListChangedCallback(selectedSeatsAliasCallback);
+
+        notifyPropertyChanged(BR.selectedSeatsAlias);
+        calculateSelectedSeats();
+    }
+
     private ObservableArrayList<Reservation> reservations = new ObservableArrayList<>();
     @Bindable
     public ObservableArrayList<Reservation> getReservations() { return reservations; };
@@ -206,15 +253,36 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
     private void calculateReservedSeats() {
         new Thread(() -> {
+            Bus bus = trip.getBus();
+
             if (seats != null && reservations != null) {
-                for (int i = 0; i < reservations.size(); i++) {
-                    Reservation reservation = reservations.get(i);
-                    for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
-                        for (int k = 0; k < seats.size(); k++) {
-                            GridSeat seat = seats.get(k);
-                            if (seat.getNum() == reservation.getReservedSeats().get(j)) {
-                                seat.setReserved(true);
-                                seat.setReservation(reservation);
+                if (bus.isUseAlias()) {
+                    for (int i = 0; i < reservations.size(); i++) {
+                        Reservation reservation = reservations.get(i);
+                        if (reservation.getReservedSeatsAlias() != null) {
+                            for (int j = 0; j < reservation.getReservedSeatsAlias().size(); j++) {
+                                for (int k = 0; k < seats.size(); k++) {
+                                    GridSeat seat = seats.get(k);
+                                    if (reservation.getReservedSeatsAlias()
+                                            .get(j)
+                                            .equals(seat.getSeatAlias())) {
+                                        seat.setReserved(true);
+                                        seat.setReservation(reservation);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < reservations.size(); i++) {
+                        Reservation reservation = reservations.get(i);
+                        for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
+                            for (int k = 0; k < seats.size(); k++) {
+                                GridSeat seat = seats.get(k);
+                                if (seat.getNum() == reservation.getReservedSeats().get(j)) {
+                                    seat.setReserved(true);
+                                    seat.setReservation(reservation);
+                                }
                             }
                         }
                     }
@@ -225,11 +293,25 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
     private void calculateSelectedSeats() {
         new Thread(() -> {
-            if (seats != null && selectedSeats != null) {
-                for (int i = 0; i < selectedSeats.size(); i++) {
-                    for (int j = 0; j < seats.size(); j++) {
-                        GridSeat seat = seats.get(j);
-                        if (seat.getNum() == selectedSeats.get(i)) seat.setSelected(true);
+            Bus bus = trip.getBus();
+
+            if (bus.isUseAlias()) {
+                if (seats != null && selectedSeatsAlias != null) {
+                    for (int i = 0; i < selectedSeatsAlias.size(); i++) {
+                        for (int j = 0; j < seats.size(); j++) {
+                            GridSeat seat = seats.get(j);
+                            if (selectedSeatsAlias.get(i).equals(seat.getSeatAlias()))
+                                seat.setSelected(true);
+                        }
+                    }
+                }
+            } else {
+                if (seats != null && selectedSeats != null) {
+                    for (int i = 0; i < selectedSeats.size(); i++) {
+                        for (int j = 0; j < seats.size(); j++) {
+                            GridSeat seat = seats.get(j);
+                            if (seat.getNum() == selectedSeats.get(i)) seat.setSelected(true);
+                        }
                     }
                 }
             }
@@ -284,7 +366,6 @@ public class BusSeatPlanViewModel extends BaseObservable {
                         seat.setSelectable("A".equals(type) || "U".equals(type) ||
                                 "L".equals(type) || "C".equals(type) ||
                                 "D".equals(type) || "/".equals(type));
-
 
                         if ("A".equals(type) || "C".equals(type) ||
                             "X".equals(type) || "D".equals(type) || "/".equals(type)) {
@@ -386,6 +467,18 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                         .get(currGridSeat.getX()));
                 }
             }
+
+            if (bus.isUseAlias()) {
+                for (int i = 0; i < seats.size(); i++) {
+                    GridSeat currGridSeat = seats.get(i);
+                    currGridSeat.setSeatAlias(bus.getSeatAliases()
+                            .get(currGridSeat.getY())
+                            .get(currGridSeat.getX()));
+                }
+            }
+            /*
+            if (bus.getSeatAliases() != null) {
+            } */
 
             BusSeatPlanViewModel.this.seats = seats;
 

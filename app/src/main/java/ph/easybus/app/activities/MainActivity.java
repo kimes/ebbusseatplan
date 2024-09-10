@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final GridSeat[] SQUARE_DIR = { NB_E, NB_SE, NB_S };
 
+    /*
     private ArrayList<String> map = new ArrayList<>(
             Arrays.asList(
                     "CC_UL",
@@ -54,8 +55,23 @@ public class MainActivity extends AppCompatActivity {
                     "AA_UL",
                     "UU_UL",
                     "LL_UL"
+            )); */
+    private ArrayList<String> map = new ArrayList<>(
+            Arrays.asList(
+                    "Ul_lU",
+                    "Ul_lU",
+                    "UL_LU",
+                    "UL_LU",
+                    "UL_RU",
+                    "UL_RU",
+                    "UL_LU",
+                    "UL_LU",
+                    "UL_LU",
+                    "UL_LU",
+                    "uu_LL"
             ));
 
+    /*
     private ArrayList<ArrayList<Integer>> seatNumbers = new ArrayList<>(
             Arrays.asList(
                     new ArrayList<>(Arrays.asList(0, 0, 0, 3, 4)),
@@ -68,6 +84,21 @@ public class MainActivity extends AppCompatActivity {
                     new ArrayList<>(Arrays.asList(12, 14, 0, 16, 15)),
                     new ArrayList<>(Arrays.asList(17, 17, 0, 18, 19)),
                     new ArrayList<>(Arrays.asList(20, 20, 0, 18, 19))
+            )); */
+
+    private ArrayList<ArrayList<String>> seatAliases = new ArrayList<>(
+            Arrays.asList(
+                    new ArrayList<>(Arrays.asList("U1", "L1", "", "L2", "U2")),
+                    new ArrayList<>(Arrays.asList("U1", "L1", "", "L2", "U2")),
+                    new ArrayList<>(Arrays.asList("U3", "L3", "", "L4", "U4")),
+                    new ArrayList<>(Arrays.asList("U3", "L3", "", "L4", "U4")),
+                    new ArrayList<>(Arrays.asList("U5", "L5", "", "", "U6")),
+                    new ArrayList<>(Arrays.asList("U5", "L5", "", "", "U6")),
+                    new ArrayList<>(Arrays.asList("U7", "L7", "", "L8", "U8")),
+                    new ArrayList<>(Arrays.asList("U7", "L7", "", "L8", "U8")),
+                    new ArrayList<>(Arrays.asList("U9", "L9", "", "L10", "U10")),
+                    new ArrayList<>(Arrays.asList("U9", "L9", "", "L10", "U10")),
+                    new ArrayList<>(Arrays.asList("U11", "U11", "", "L11", "L11"))
             ));
 
     private int clickCounter = 0;
@@ -89,7 +120,10 @@ public class MainActivity extends AppCompatActivity {
         //bus.setLayout("c");
         bus.setLayout("d");
         bus.setSeatMap(map);
-        bus.setSeatNumbers(seatNumbers);
+
+        bus.setUseAlias(true);
+        bus.setSeatAliases(seatAliases);
+        //bus.setSeatNumbers(seatNumbers);
 
         /*
         Parcel parcel = Parcel.obtain();
@@ -114,16 +148,23 @@ public class MainActivity extends AppCompatActivity {
         ObservableArrayList<Reservation> reservations = new ObservableArrayList<>();
 
         ObservableArrayList<Integer> reservedSeats = new ObservableArrayList<>();
-
         reservedSeats.addAll(Arrays.asList(13, 14));
+
+        ObservableArrayList<String> reservedSeatsAlias = new ObservableArrayList<>();
+        reservedSeatsAlias.addAll(Arrays.asList("U4", "L4"));
 
         Reservation reservation = new Reservation();
         reservation.setShortAlias("M");
         reservation.setStatus(1);
         reservation.setReservedSeats(reservedSeats);
+        reservation.setReservedSeatsAlias(reservedSeatsAlias);
 
         reservations.add(reservation);
         viewModel.setReservations(reservations);
+
+        ObservableArrayList<String> selectedSeatsAlias = new ObservableArrayList<>();
+        selectedSeatsAlias.addAll(Arrays.asList("L10", "U10", "U2", "U8"));
+        //viewModel.getSelectedSeatsAlias().setValue(selectedSeatsAlias);
 
         /*
         int rows = map.length, cols = map[0].length();
@@ -143,6 +184,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSeatSelected(GridSeat busSeat, boolean selected) {
-
+        System.out.println("ON SEAT SELECTED: " + busSeat.getSeatAlias());
     }
 }

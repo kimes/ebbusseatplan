@@ -9,12 +9,16 @@ import android.widget.LinearLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import ph.easybus.ebbusseatplan.R;
 import ph.easybus.ebbusseatplan.databinding.ViewBusSeatPlanBinding;
 import ph.easybus.ebbusseatplan.listeners.RecyclerTouchListener;
 import ph.easybus.ebbusseatplan.models.BusSeat;
 import ph.easybus.ebbusseatplan.models.GridSeat;
 import ph.easybus.ebbusseatplan.viewmodels.BusSeatPlanViewModel;
+import ph.easybus.ebmodels.models.Bus;
+import ph.easybus.ebmodels.models.Trip;
 
 public class BusSeatPlanView extends LinearLayout implements RecyclerTouchListener.OnItemClickListener,
         BusSeatPlanViewModel.OnSeatPlanEventListener {
@@ -35,10 +39,18 @@ public class BusSeatPlanView extends LinearLayout implements RecyclerTouchListen
         onMaxSeatsSelectedListener = listener;
     }
 
+    private ArrayList<OnSeatSelectionListener> onSeatSelectionListeners = new ArrayList<>();
+    public void addOnSeatSelectionListeners(OnSeatSelectionListener onSeatSelectionListener) {
+        this.onSeatSelectionListeners.add(onSeatSelectionListener);
+    }
+    public void removeOnSeatSelectionListeners(OnSeatSelectionListener onSeatSelectionListener) {
+        this.onSeatSelectionListeners.add(onSeatSelectionListener);
+    }
+    /*
     private OnSeatSelectionListener onSeatSelectionListener;
     public void setOnSeatSelectionListener(OnSeatSelectionListener listener) {
         onSeatSelectionListener = listener;
-    }
+    } */
 
     private BusSeatPlanViewModel.OnSeatPlanEventListener onSeatPlanEventListener;
     public void setOnSeatPlanEventListener(BusSeatPlanViewModel.OnSeatPlanEventListener listener) {
@@ -78,17 +90,27 @@ public class BusSeatPlanView extends LinearLayout implements RecyclerTouchListen
     public void onClick(View view, int position) {
         if (!enabled) { return; }
 
+        Trip trip = viewModel.getTrip();
+        Bus bus = trip.getBus();
+
         GridSeat seat = viewModel.getSeats().get(position);
 
         if (seat.isSelectable()) {
-
             boolean process = true;
             if (seat.isReserved()) process = false;
 
             if (maxSelectedSeats > 0) {
-                if (viewModel.getSelectedSeats().size() >= maxSelectedSeats) {
-                    process = false;
-                    if (onMaxSeatsSelectedListener != null) onMaxSeatsSelectedListener.onMaxSeatSelected();
+
+                if (bus.isUseAlias()) {
+                    if (viewModel.getSelectedSeatsAlias().size() >= maxSelectedSeats) {
+                        process = false;
+                        if (onMaxSeatsSelectedListener != null) onMaxSeatsSelectedListener.onMaxSeatSelected();
+                    }
+                } else {
+                    if (viewModel.getSelectedSeats().size() >= maxSelectedSeats) {
+                        process = false;
+                        if (onMaxSeatsSelectedListener != null) onMaxSeatsSelectedListener.onMaxSeatSelected();
+                    }
                 }
 
                 if (seat.isSelected()) process = true;
@@ -96,25 +118,59 @@ public class BusSeatPlanView extends LinearLayout implements RecyclerTouchListen
 
             if (process) {
                 boolean selected = false;
-                if (!seat.isSelected()) {
-                    viewModel.getSelectedSeats().add(seat.getNum());
-                    selected = true;
-                } else {
-                    int selectedIndex = -1;
-                    for (int i = 0; i < viewModel.getSelectedSeats().size(); i++) {
-                        if (viewModel.getSelectedSeats().get(i) == seat.getNum()) {
-                            selectedIndex = i;
-                            break;
+
+                if (bus.isUseAlias()) {
+                    if (!seat.isSelected()) {
+                        //viewModel.getSelectedSeats().add(1);
+                        viewModel.getSelectedSeatsAlias().add(seat.getSeatAlias());
+                        selected = true;
+                    } else {
+                        int selectedIndex = -1;
+                        for (int i = 0; i < viewModel.getSelectedSeatsAlias().size(); i++) {
+                            if (viewModel.getSelectedSeatsAlias().get(i).equals(seat.getSeatAlias())) {
+                                selectedIndex = i;
+                                break;
+                            }
+                        }
+
+                        if (selectedIndex >= 0) {
+                            viewModel.getSelectedSeatsAlias().remove(selectedIndex);
+                            selected = false;
                         }
                     }
 
-                    if (selectedIndex >= 0) {
-                        viewModel.getSelectedSeats().remove(selectedIndex);
-                        selected = false;
+                    if (onSeatSelectionListeners != null) {
+                        for (int i = 0; i < onSeatSelectionListeners.size(); i++) {
+                            onSeatSelectionListeners.get(i).onSeatSelected(seat, selected);
+                        }
+                        //onSeatSelectionListener.onSeatSelected(seat, selected);
+                    }
+                } else {
+                    if (!seat.isSelected()) {
+                        viewModel.getSelectedSeats().add(seat.getNum());
+                        selected = true;
+                    } else {
+                        int selectedIndex = -1;
+                        for (int i = 0; i < viewModel.getSelectedSeats().size(); i++) {
+                            if (viewModel.getSelectedSeats().get(i) == seat.getNum()) {
+                                selectedIndex = i;
+                                break;
+                            }
+                        }
+
+                        if (selectedIndex >= 0) {
+                            viewModel.getSelectedSeats().remove(selectedIndex);
+                            selected = false;
+                        }
+                    }
+
+                    if (onSeatSelectionListeners != null) {
+                        for (int i = 0; i < onSeatSelectionListeners.size(); i++) {
+                            onSeatSelectionListeners.get(i).onSeatSelected(seat, selected);
+                        }
+                        //onSeatSelectionListener.onSeatSelected(seat, selected);
                     }
                 }
-
-                if (onSeatSelectionListener != null) onSeatSelectionListener.onSeatSelected(seat, selected);
             }
         }
 
