@@ -39,6 +39,11 @@ public class BusSeatPlanView extends LinearLayout implements RecyclerTouchListen
         onMaxSeatsSelectedListener = listener;
     }
 
+    private OnReservedSeatClickListener onReservedSeatClickListener;
+    public void setOnReservedSeatClickListener(OnReservedSeatClickListener listener) {
+        onReservedSeatClickListener = listener;
+    }
+
     private ArrayList<OnSeatSelectionListener> onSeatSelectionListeners = new ArrayList<>();
     public void addOnSeatSelectionListeners(OnSeatSelectionListener onSeatSelectionListener) {
         this.onSeatSelectionListeners.add(onSeatSelectionListener);
@@ -174,6 +179,11 @@ public class BusSeatPlanView extends LinearLayout implements RecyclerTouchListen
             }
         }
 
+        if (seat.isReserved()) {
+            if (onReservedSeatClickListener != null)
+                onReservedSeatClickListener.onReservedSeatClick(seat);
+        }
+
         /*
         if (seat.getSeatType() == BusSeat.SEAT_TYPE_AVAILABLE ||
             seat.getSeatType() == BusSeat.SEAT_TYPE_PREMIUM) {
@@ -229,6 +239,10 @@ public class BusSeatPlanView extends LinearLayout implements RecyclerTouchListen
 
     public interface OnSeatSelectionListener {
         void onSeatSelected(GridSeat busSeat, boolean selected);
+    }
+
+    public interface OnReservedSeatClickListener {
+        void onReservedSeatClick(GridSeat busSeat);
     }
 
     public interface OnMaxSeatsSelectedListener {

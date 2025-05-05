@@ -52,6 +52,14 @@ public class BusSeatPlanViewBindingUtil {
         seatPlanView.setEnabled(enabled);
     }
 
+    @BindingAdapter("onReservedSeatClick")
+    public static void setOnReservedSeatClick(BusSeatPlanView seatPlanView,
+                                              final BusSeatPlanView.OnReservedSeatClickListener listener) {
+        seatPlanView.setOnReservedSeatClickListener((seat) -> {
+            if (listener != null) listener.onReservedSeatClick(seat);
+        });
+    }
+
     @BindingAdapter("onSelectedSeatsChanged")
     public static void setOnSelectedSeatsChanged(BusSeatPlanView seatPlanView,
                                                  final BusSeatPlanView.OnSeatSelectionListener listener) {

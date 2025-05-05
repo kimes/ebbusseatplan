@@ -186,4 +186,8 @@ public class MainActivity extends AppCompatActivity {
     public void onSeatSelected(GridSeat busSeat, boolean selected) {
         System.out.println("ON SEAT SELECTED: " + busSeat.getSeatAlias());
     }
+
+    public void onReservedSeatClick(GridSeat seat) {
+
+    }
 }

@@ -23,6 +23,7 @@
             selectedSeatsAlias="@={viewModel.selectedSeatsAlias}"
             office='@{"M"}'
             onSelectedSeatsChanged="@{listener::onSeatSelected}"
+            onReservedSeatClick="@{listener::onReservedSeatClick}"
             reservations="@{viewModel.reservations}"
             maxSelectedSeats="@{6}"
             isCustomersView="@{true}" />
