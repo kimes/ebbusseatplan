@@ -12,7 +12,7 @@ public class GridSeat extends BaseObservable {
     private boolean selectable = true, numberable = false, showSeat = true;
 
     @Bindable
-    private boolean selected = false, reserved = false;
+    private boolean selected = false, reserved = false, validated = false;
 
     private int x = 0, y = 0, w = 1, h = 1, side = 0;
     
@@ -47,6 +47,7 @@ public class GridSeat extends BaseObservable {
     public boolean isShowSeat() { return showSeat; }
     public boolean isSelected() { return selected; }
     public boolean isReserved() { return reserved; }
+    public boolean isValidated() { return validated; }
     public int getX() { return x; }
     public int getY() { return y; }
     public int getW() { return w; }
@@ -68,6 +69,10 @@ public class GridSeat extends BaseObservable {
     public void setReserved(boolean reserved) {
         this.reserved = reserved;
         notifyPropertyChanged(BR.reserved);
+    }
+    public void setValidated(boolean validated) {
+        this.validated = validated;
+        notifyPropertyChanged(BR.validated);
     }
     public void setX(int x) { this.x = x; }
     public void setY(int y) { this.y = y; }

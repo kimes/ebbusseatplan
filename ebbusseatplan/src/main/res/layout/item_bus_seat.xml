@@ -137,6 +137,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 badgeReservation="@{seatModel.reservation.status}"
+                badgeReservationValidated="@{false}"
                 badgeReservationOwnOffice="@{seatModel.seatPlanViewModel.office}"
                 badgeReservationOffice="@{seatModel.reservation.shortAlias}">
 

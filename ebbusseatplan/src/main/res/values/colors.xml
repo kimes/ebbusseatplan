@@ -12,6 +12,11 @@
     <color name="blue60">#E1EFF3</color>
     <color name="blue70">#F0F7F9</color>
 
+    <color name="indigo10">#2E307E</color>
+    <color name="indigo20">#0A0C48</color>
+    <color name="indigo30">#4446B7</color>
+    <color name="indigo40">#546AF7</color>
+
     <color name="gray10">#333333</color>
     <color name="gray20">#4F4F4F</color>
     <color name="gray30">#828282</color>

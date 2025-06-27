@@ -13,6 +13,7 @@ import ph.easybus.ebbusseatplan.BR;
 import ph.easybus.ebbusseatplan.models.BusSeat;
 import ph.easybus.ebbusseatplan.models.GridSeat;
 import ph.easybus.ebmodels.models.Bus;
+import ph.easybus.ebmodels.models.Passenger;
 import ph.easybus.ebmodels.models.Reservation;
 import ph.easybus.ebmodels.models.Trip;
 
@@ -265,11 +266,19 @@ public class BusSeatPlanViewModel extends BaseObservable {
                             for (int j = 0; j < reservation.getReservedSeatsAlias().size(); j++) {
                                 for (int k = 0; k < seats.size(); k++) {
                                     GridSeat seat = seats.get(k);
+
                                     if (reservation.getReservedSeatsAlias()
                                             .get(j)
                                             .equals(seat.getSeatAlias())) {
                                         seat.setReserved(true);
                                         seat.setReservation(reservation);
+
+                                        if (reservation.getPassengers() != null) {
+                                            if (reservation.getPassengers().size() == reservation.getReservedSeatsAlias().size()) {
+                                                Passenger passValid = reservation.getPassengers().get(j);
+                                                seat.setValidated(passValid.isValidated());
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -284,6 +293,13 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                 if (seat.getNum() == reservation.getReservedSeats().get(j)) {
                                     seat.setReserved(true);
                                     seat.setReservation(reservation);
+
+                                    if (reservation.getPassengers() != null) {
+                                        if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
+                                            Passenger passValid = reservation.getPassengers().get(j);
+                                            seat.setValidated(passValid.isValidated());
+                                        }
+                                    }
                                 }
                             }
                         }

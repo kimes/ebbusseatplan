@@ -24,6 +24,7 @@ import ph.easybus.ebbusseatplan.app.databinding.ActivityMainBinding;
 import ph.easybus.ebbusseatplan.layoutmanagers.SpannedGridLayoutManager;
 import ph.easybus.ebbusseatplan.listeners.RecyclerTouchListener;
 import ph.easybus.ebmodels.models.Bus;
+import ph.easybus.ebmodels.models.Passenger;
 import ph.easybus.ebmodels.models.Reservation;
 import ph.easybus.ebmodels.models.Trip;
 
@@ -159,11 +160,22 @@ public class MainActivity extends AppCompatActivity {
         reservation.setReservedSeats(reservedSeats);
         reservation.setReservedSeatsAlias(reservedSeatsAlias);
 
+        Passenger pass1 = new Passenger();
+        pass1.setValidated(true);
+
+        Passenger pass2 = new Passenger();
+        pass2.setValidated(true);
+
+        ObservableArrayList<Passenger> passengers = new ObservableArrayList<>();
+        passengers.add(pass1);
+        passengers.add(pass2);
+        reservation.setPassengers(passengers);
+
         reservations.add(reservation);
         viewModel.setReservations(reservations);
 
-        ObservableArrayList<String> selectedSeatsAlias = new ObservableArrayList<>();
-        selectedSeatsAlias.addAll(Arrays.asList("L10", "U10", "U2", "U8"));
+        //ObservableArrayList<String> selectedSeatsAlias = new ObservableArrayList<>();
+        //selectedSeatsAlias.addAll(Arrays.asList("L10", "U10", "U2", "U8"));
         //viewModel.getSelectedSeatsAlias().setValue(selectedSeatsAlias);
 
         /*

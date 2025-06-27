@@ -65,8 +65,9 @@ public class ViewBindingUtil {
         view.setVisibility(visibility);
     }
 
-    @BindingAdapter({ "badgeReservation", "badgeReservationOwnOffice", "badgeReservationOffice" })
+    @BindingAdapter({ "badgeReservation", "badgeReservationValidated", "badgeReservationOwnOffice", "badgeReservationOffice"})
     public static void setBadgeReservation(View view, int badgeReservation,
+                                            boolean badgeReservationValidated,
                                             String badgeReservationOwnOffice,
                                             String badgeReservationOffice) {
         int badgeDrawable = R.drawable.badge_pending;
@@ -91,8 +92,11 @@ public class ViewBindingUtil {
                 } else {
                     badgeDrawable = R.drawable.badge_reserved_other;
                 }
+
+                if (badgeReservationValidated) badgeDrawable = R.drawable.badge_reserved_validated;
                 break;
         }
+
         view.setBackground(ResourcesCompat.getDrawable(view.getResources(),
                 badgeDrawable, view.getContext().getTheme()));
     }
