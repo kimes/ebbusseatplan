@@ -210,7 +210,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                 seat.setReserved(false);
                                 seat.setReservation(null);
 
-                                seat.setValidated(false);
+                                seat.setPassenger(null);
                             }
                         }
                     }
@@ -229,8 +229,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                                     if (reservation.getPassengers() != null) {
                                         if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
-                                            Passenger passValid = reservation.getPassengers().get(j);
-                                            seat.setValidated(passValid.isValidated());
+                                            seat.setPassenger(reservation.getPassengers().get(j));
                                         }
                                     }
                                 }
@@ -284,8 +283,9 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                                         if (reservation.getPassengers() != null) {
                                             if (reservation.getPassengers().size() == reservation.getReservedSeatsAlias().size()) {
-                                                Passenger passValid = reservation.getPassengers().get(j);
-                                                seat.setValidated(passValid.isValidated());
+                                                //Passenger passValid = reservation.getPassengers().get(j);
+                                                //seat.setValidated(passValid.isValidated());
+                                                seat.setPassenger(reservation.getPassengers().get(j));
                                             }
                                         }
                                     }

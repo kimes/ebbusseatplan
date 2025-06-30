@@ -5,6 +5,7 @@ import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
 import ph.easybus.ebbusseatplan.viewmodels.BusSeatPlanViewModel;
+import ph.easybus.ebmodels.models.Passenger;
 import ph.easybus.ebmodels.models.Reservation;
 
 public class GridSeat extends BaseObservable {
@@ -24,6 +25,9 @@ public class GridSeat extends BaseObservable {
 
     @Bindable
     private Reservation reservation;
+
+    @Bindable
+    private Passenger passenger = new Passenger();
 
     @Bindable
     private BusSeatPlanViewModel seatPlan;
@@ -56,6 +60,7 @@ public class GridSeat extends BaseObservable {
     public int getNum() { return num; }
     public String getType() { return type; }
     public String getSeatAlias() { return seatAlias; }
+    public Passenger getPassenger() { return passenger; }
     public Reservation getReservation() { return reservation; }
     public BusSeatPlanViewModel getSeatPlan() { return seatPlan; }
 
@@ -82,6 +87,10 @@ public class GridSeat extends BaseObservable {
     public void setNum(int num) { this.num = num; }
     public void setType(String type) { this.type = type; }
     public void setSeatAlias(String seatAlias) { this.seatAlias = seatAlias; }
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
+        notifyPropertyChanged(BR.passenger);
+    }
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
         notifyPropertyChanged(BR.reservation);
