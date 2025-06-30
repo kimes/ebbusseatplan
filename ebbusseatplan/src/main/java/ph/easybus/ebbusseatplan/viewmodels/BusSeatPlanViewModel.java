@@ -224,6 +224,13 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                 if (seat.getNum() == reservation.getReservedSeats().get(j)) {
                                     seat.setReserved(true);
                                     seat.setReservation(reservation);
+
+                                    if (reservation.getPassengers() != null) {
+                                        if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
+                                            Passenger passValid = reservation.getPassengers().get(j);
+                                            seat.setValidated(passValid.isValidated());
+                                        }
+                                    }
                                 }
                             }
                         }
