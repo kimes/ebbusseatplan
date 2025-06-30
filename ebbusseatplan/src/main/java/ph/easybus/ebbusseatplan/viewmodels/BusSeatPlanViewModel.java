@@ -209,6 +209,8 @@ public class BusSeatPlanViewModel extends BaseObservable {
                             if (!existOnList) {
                                 seat.setReserved(false);
                                 seat.setReservation(null);
+
+                                seat.setValidated(false);
                             }
                         }
                     }
