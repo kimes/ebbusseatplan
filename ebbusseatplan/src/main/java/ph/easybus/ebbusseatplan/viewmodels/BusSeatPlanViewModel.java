@@ -194,7 +194,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
                     System.out.println("BUS SEAT: ON ITEM RANGE CHANGED: " + positionStart + " | " + itemCount);
                     if (bus.isUseAlias()) {
                         for (int i = 0; i < itemCount; i++) {
-                            Reservation reservation = sender.get(i);
+                            Reservation reservation = sender.get(positionStart + i);
                             for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
                                 for (int k = 0; k < seats.size(); k++) {
                                     GridSeat seat = seats.get(k);
@@ -216,7 +216,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
                         }
                     } else {
                         for (int i = 0; i < itemCount; i++) {
-                            Reservation reservation = sender.get(i);
+                            Reservation reservation = sender.get(positionStart + i);
                             for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
                                 for (int k = 0; k < seats.size(); k++) {
                                     GridSeat seat = seats.get(k);
@@ -277,7 +277,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                     if (bus.isUseAlias()) {
                         for (int i = 0; i < itemCount; i++) {
-                            Reservation reservation = sender.get(i);
+                            Reservation reservation = sender.get(positionStart + i);
                             for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
                                 for (int k = 0; k < seats.size(); k++) {
                                     GridSeat seat = seats.get(k);
@@ -298,7 +298,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
                         }
                     } else {
                         for (int i = 0; i < itemCount; i++) {
-                            Reservation reservation = sender.get(i);
+                            Reservation reservation = sender.get(positionStart + i);
                             for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
                                 for (int k = 0; k < seats.size(); k++) {
                                     GridSeat seat = seats.get(k);
