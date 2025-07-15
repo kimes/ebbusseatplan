@@ -97,8 +97,8 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                 public void onItemRangeInserted(ObservableList<Integer> sender,
                                                 int positionStart, int itemCount) {
-                    for (int i = positionStart; i < itemCount; i++) {
-                        int selectedSeat = sender.get(i);
+                    for (int i = 0; i < itemCount; i++) {
+                        int selectedSeat = sender.get(positionStart + i);
                         for (int j = 0; j < seats.size(); j++) {
                             GridSeat seat = seats.get(j);
                             if (seat.getNum() == selectedSeat) {
@@ -191,7 +191,6 @@ public class BusSeatPlanViewModel extends BaseObservable {
                     if (currTrip == null) return;
                     Bus bus = currTrip.getBus();
 
-                    System.out.println("BUS SEAT: ON ITEM RANGE CHANGED: " + positionStart + " | " + itemCount);
                     if (bus.isUseAlias()) {
                         for (int i = 0; i < itemCount; i++) {
                             Reservation reservation = sender.get(positionStart + i);
@@ -226,9 +225,6 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                                         if (reservation.getPassengers() != null) {
                                             if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
-                                                System.out.println("BUS SEAT: CHANGING PASSENGER ON SEAT: " +
-                                                        seat.getNum() + " | " +
-                                                        reservation.getPassengers().get(j).isValidated());
                                                 seat.setPassenger(reservation.getPassengers().get(j));
                                             }
                                         }
@@ -308,9 +304,6 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                                         if (reservation.getPassengers() != null) {
                                             if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
-                                                System.out.println("BUS SEAT: CHANGING PASSENGER ON SEAT: " +
-                                                        seat.getNum() + " | " +
-                                                        reservation.getPassengers().get(j).isValidated());
                                                 seat.setPassenger(reservation.getPassengers().get(j));
                                             }
                                         }
@@ -388,8 +381,9 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                                     if (reservation.getPassengers() != null) {
                                         if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
-                                            Passenger passValid = reservation.getPassengers().get(j);
-                                            seat.setValidated(passValid.isValidated());
+                                            //Passenger passValid = reservation.getPassengers().get(j);
+                                            //seat.setValidated(passValid.isValidated());
+                                            seat.setPassenger(reservation.getPassengers().get(j));
                                         }
                                     }
                                 }
