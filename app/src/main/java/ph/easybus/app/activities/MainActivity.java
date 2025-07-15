@@ -174,6 +174,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         reservation.setPassengers(passengers);
 
         reservations.add(reservation);
+
+        reservedSeats = new ObservableArrayList<>();
+        reservedSeats.addAll(Arrays.asList(11, 12));
+
+        reservedSeatsAlias = new ObservableArrayList<>();
+        reservedSeatsAlias.addAll(Arrays.asList("U3", "L3"));
+
+        reservation = new Reservation();
+        reservation.setShortAlias("M");
+        reservation.setStatus(1);
+        reservation.setReservedSeats(reservedSeats);
+        reservation.setReservedSeatsAlias(reservedSeatsAlias);
+
+        pass1 = new Passenger();
+        //pass1.setValidated(true);
+
+        pass2 = new Passenger();
+        //pass2.setValidated(true);
+
+        passengers = new ObservableArrayList<>();
+        passengers.add(pass1);
+        passengers.add(pass2);
+        reservation.setPassengers(passengers);
+
+
+        reservations.add(reservation);
         viewModel.setReservations(reservations);
 
         //ObservableArrayList<String> selectedSeatsAlias = new ObservableArrayList<>();
@@ -209,19 +235,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ObservableArrayList<Reservation> reservations = viewModel.getReservations().getValue();
 
         if (reservations.size() > 0) {
-            Reservation reservation = reservations.get(0);
+            for (int i = 0; i < reservations.size(); i++) {
 
-            Passenger pass1 = new Passenger();
-            pass1.setValidated(true);
+                Reservation reservation = reservations.get(i);
+                Passenger pass1 = new Passenger();
+                pass1.setValidated(true);
 
-            Passenger pass2 = new Passenger();
-            pass2.setValidated(true);
+                Passenger pass2 = new Passenger();
+                pass2.setValidated(true);
 
-            ObservableArrayList<Passenger> passengers = new ObservableArrayList<>();
-            passengers.add(pass1);
-            passengers.add(pass2);
-            reservation.setPassengers(passengers);
-            reservations.set(0, reservation);
+                ObservableArrayList<Passenger> passengers = new ObservableArrayList<>();
+                passengers.add(pass1);
+                passengers.add(pass2);
+                reservation.setPassengers(passengers);
+                reservations.set(0, reservation);
+            }
             //reservation.setPassengers(passengers);
         }
     }

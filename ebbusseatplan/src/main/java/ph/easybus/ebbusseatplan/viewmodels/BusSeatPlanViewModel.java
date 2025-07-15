@@ -191,6 +191,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
                     if (currTrip == null) return;
                     Bus bus = currTrip.getBus();
 
+                    System.out.println("BUS SEAT: ON ITEM RANGE CHANGED: " + positionStart + " | " + itemCount);
                     if (bus.isUseAlias()) {
                         for (int i = positionStart; i < itemCount; i++) {
                             Reservation reservation = sender.get(i);
@@ -208,6 +209,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
                                                 seat.setPassenger(reservation.getPassengers().get(j));
                                             }
                                         }
+                                        break;
                                     }
                                 }
                             }
@@ -224,9 +226,13 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                                         if (reservation.getPassengers() != null) {
                                             if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
+                                                System.out.println("BUS SEAT: CHANGING PASSENGER ON SEAT: " +
+                                                        seat.getNum() + " | " +
+                                                        reservation.getPassengers().get(j).isValidated());
                                                 seat.setPassenger(reservation.getPassengers().get(j));
                                             }
                                         }
+                                        break;
                                     }
                                 }
                             }
@@ -302,6 +308,9 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                                         if (reservation.getPassengers() != null) {
                                             if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
+                                                System.out.println("BUS SEAT: CHANGING PASSENGER ON SEAT: " +
+                                                        seat.getNum() + " | " +
+                                                        reservation.getPassengers().get(j).isValidated());
                                                 seat.setPassenger(reservation.getPassengers().get(j));
                                             }
                                         }
