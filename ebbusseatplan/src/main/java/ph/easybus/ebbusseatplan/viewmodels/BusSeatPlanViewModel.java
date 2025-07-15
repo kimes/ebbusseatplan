@@ -193,7 +193,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                     System.out.println("BUS SEAT: ON ITEM RANGE CHANGED: " + positionStart + " | " + itemCount);
                     if (bus.isUseAlias()) {
-                        for (int i = positionStart; i < itemCount; i++) {
+                        for (int i = 0; i < itemCount; i++) {
                             Reservation reservation = sender.get(i);
                             for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
                                 for (int k = 0; k < seats.size(); k++) {
@@ -215,7 +215,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
                             }
                         }
                     } else {
-                        for (int i = positionStart; i < itemCount; i++) {
+                        for (int i = 0; i < itemCount; i++) {
                             Reservation reservation = sender.get(i);
                             for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
                                 for (int k = 0; k < seats.size(); k++) {
@@ -276,7 +276,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
                     Bus bus = currTrip.getBus();
 
                     if (bus.isUseAlias()) {
-                        for (int i = positionStart; i < itemCount; i++) {
+                        for (int i = 0; i < itemCount; i++) {
                             Reservation reservation = sender.get(i);
                             for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
                                 for (int k = 0; k < seats.size(); k++) {
@@ -297,7 +297,7 @@ public class BusSeatPlanViewModel extends BaseObservable {
                             }
                         }
                     } else {
-                        for (int i = positionStart; i < itemCount; i++) {
+                        for (int i = 0; i < itemCount; i++) {
                             Reservation reservation = sender.get(i);
                             for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
                                 for (int k = 0; k < seats.size(); k++) {
