@@ -185,7 +185,54 @@ public class BusSeatPlanViewModel extends BaseObservable {
                 public void onChanged(ObservableList<Reservation> sender) {}
 
                 public void onItemRangeChanged(ObservableList<Reservation> sender,
-                                               int positionStart, int itemCount) {}
+                                               int positionStart, int itemCount) {
+
+                    Trip currTrip = BusSeatPlanViewModel.this.trip;
+                    if (currTrip == null) return;
+                    Bus bus = currTrip.getBus();
+
+                    if (bus.isUseAlias()) {
+                        for (int i = positionStart; i < itemCount; i++) {
+                            Reservation reservation = sender.get(i);
+                            for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
+                                for (int k = 0; k < seats.size(); k++) {
+                                    GridSeat seat = seats.get(k);
+                                    if (reservation.getReservedSeatsAlias()
+                                            .get(j)
+                                            .equals(seat.getSeatAlias())) {
+                                        seat.setReserved(true);
+                                        seat.setReservation(reservation);
+
+                                        if (reservation.getPassengers() != null) {
+                                            if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
+                                                seat.setPassenger(reservation.getPassengers().get(j));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        for (int i = positionStart; i < itemCount; i++) {
+                            Reservation reservation = sender.get(i);
+                            for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
+                                for (int k = 0; k < seats.size(); k++) {
+                                    GridSeat seat = seats.get(k);
+                                    if (seat.getNum() == reservation.getReservedSeats().get(j)) {
+                                        seat.setReserved(true);
+                                        seat.setReservation(reservation);
+
+                                        if (reservation.getPassengers() != null) {
+                                            if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
+                                                seat.setPassenger(reservation.getPassengers().get(j));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
                 public void onItemRangeMoved(ObservableList<Reservation> sender,
                                              int fromPosition, int toPosition, int itemCount) {}
@@ -218,18 +265,45 @@ public class BusSeatPlanViewModel extends BaseObservable {
 
                 public void onItemRangeInserted(ObservableList<Reservation> sender,
                                                 int positionStart, int itemCount) {
-                    for (int i = positionStart; i < itemCount; i++) {
-                        Reservation reservation = sender.get(i);
-                        for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
-                            for (int k = 0; k < seats.size(); k++) {
-                                GridSeat seat = seats.get(k);
-                                if (seat.getNum() == reservation.getReservedSeats().get(j)) {
-                                    seat.setReserved(true);
-                                    seat.setReservation(reservation);
+                    Trip currTrip = BusSeatPlanViewModel.this.trip;
+                    if (currTrip == null) return;
+                    Bus bus = currTrip.getBus();
 
-                                    if (reservation.getPassengers() != null) {
-                                        if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
-                                            seat.setPassenger(reservation.getPassengers().get(j));
+                    if (bus.isUseAlias()) {
+                        for (int i = positionStart; i < itemCount; i++) {
+                            Reservation reservation = sender.get(i);
+                            for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
+                                for (int k = 0; k < seats.size(); k++) {
+                                    GridSeat seat = seats.get(k);
+                                    if (reservation.getReservedSeatsAlias()
+                                            .get(j)
+                                            .equals(seat.getSeatAlias())) {
+                                        seat.setReserved(true);
+                                        seat.setReservation(reservation);
+
+                                        if (reservation.getPassengers() != null) {
+                                            if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
+                                                seat.setPassenger(reservation.getPassengers().get(j));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        for (int i = positionStart; i < itemCount; i++) {
+                            Reservation reservation = sender.get(i);
+                            for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
+                                for (int k = 0; k < seats.size(); k++) {
+                                    GridSeat seat = seats.get(k);
+                                    if (seat.getNum() == reservation.getReservedSeats().get(j)) {
+                                        seat.setReserved(true);
+                                        seat.setReservation(reservation);
+
+                                        if (reservation.getPassengers() != null) {
+                                            if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
+                                                seat.setPassenger(reservation.getPassengers().get(j));
+                                            }
                                         }
                                     }
                                 }

@@ -28,7 +28,7 @@ import ph.easybus.ebmodels.models.Passenger;
 import ph.easybus.ebmodels.models.Reservation;
 import ph.easybus.ebmodels.models.Trip;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final GridSeat NB_NW = new GridSeat(-1, -1, "A"),
             NB_N = new GridSeat(0, -1, "A"),
@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
         binding.setLifecycleOwner(this);
         binding.setListener(this);
 
+        binding.tvChange.setOnClickListener(this);
+
         Bus bus = new Bus();
         //bus.setLayout("c");
         bus.setLayout("d");
@@ -161,10 +163,10 @@ public class MainActivity extends AppCompatActivity {
         reservation.setReservedSeatsAlias(reservedSeatsAlias);
 
         Passenger pass1 = new Passenger();
-        pass1.setValidated(true);
+        //pass1.setValidated(true);
 
         Passenger pass2 = new Passenger();
-        pass2.setValidated(true);
+        //pass2.setValidated(true);
 
         ObservableArrayList<Passenger> passengers = new ObservableArrayList<>();
         passengers.add(pass1);
@@ -200,6 +202,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onReservedSeatClick(GridSeat seat) {
+    }
 
+    @Override
+    public void onClick(View view) {
+        ObservableArrayList<Reservation> reservations = viewModel.getReservations().getValue();
+
+        if (reservations.size() > 0) {
+            Reservation reservation = reservations.get(0);
+
+            Passenger pass1 = new Passenger();
+            pass1.setValidated(true);
+
+            Passenger pass2 = new Passenger();
+            pass2.setValidated(true);
+
+            ObservableArrayList<Passenger> passengers = new ObservableArrayList<>();
+            passengers.add(pass1);
+            passengers.add(pass2);
+            reservation.setPassengers(passengers);
+            reservations.set(0, reservation);
+            //reservation.setPassengers(passengers);
+        }
     }
 }
