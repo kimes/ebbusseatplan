@@ -197,18 +197,20 @@ public class BusSeatPlanViewModel extends BaseObservable {
                             for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
                                 for (int k = 0; k < seats.size(); k++) {
                                     GridSeat seat = seats.get(k);
-                                    if (reservation.getReservedSeatsAlias()
-                                            .get(j)
-                                            .equals(seat.getSeatAlias())) {
-                                        seat.setReserved(true);
-                                        seat.setReservation(reservation);
+                                    if (reservation.getReservedSeatsAlias() != null) {
+                                        if (reservation.getReservedSeatsAlias()
+                                                .get(j)
+                                                .equals(seat.getSeatAlias())) {
+                                            seat.setReserved(true);
+                                            seat.setReservation(reservation);
 
-                                        if (reservation.getPassengers() != null) {
-                                            if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
-                                                seat.setPassenger(reservation.getPassengers().get(j));
+                                            if (reservation.getPassengers() != null) {
+                                                if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
+                                                    seat.setPassenger(reservation.getPassengers().get(j));
+                                                }
                                             }
+                                            break;
                                         }
-                                        break;
                                     }
                                 }
                             }
@@ -277,15 +279,18 @@ public class BusSeatPlanViewModel extends BaseObservable {
                             for (int j = 0; j < reservation.getReservedSeats().size(); j++) {
                                 for (int k = 0; k < seats.size(); k++) {
                                     GridSeat seat = seats.get(k);
-                                    if (reservation.getReservedSeatsAlias()
-                                            .get(j)
-                                            .equals(seat.getSeatAlias())) {
-                                        seat.setReserved(true);
-                                        seat.setReservation(reservation);
 
-                                        if (reservation.getPassengers() != null) {
-                                            if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
-                                                seat.setPassenger(reservation.getPassengers().get(j));
+                                    if (reservation.getReservedSeats() != null) {
+                                        if (reservation.getReservedSeatsAlias()
+                                                .get(j)
+                                                .equals(seat.getSeatAlias())) {
+                                            seat.setReserved(true);
+                                            seat.setReservation(reservation);
+
+                                            if (reservation.getPassengers() != null) {
+                                                if (reservation.getPassengers().size() == reservation.getReservedSeats().size()) {
+                                                    seat.setPassenger(reservation.getPassengers().get(j));
+                                                }
                                             }
                                         }
                                     }
